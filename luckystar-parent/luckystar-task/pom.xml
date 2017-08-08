@@ -8,11 +8,11 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>com.luckystar</groupId>
-  <artifactId>luckystar-web</artifactId>
+  <artifactId>luckystar-task</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>war</packaging>
+  <packaging>jar</packaging>
   
-  <name>luckystar-web</name>
+  <name>luckystar-task</name>
   <url>http://maven.apache.org</url>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,30 +28,6 @@
     	<groupId>com.luckystar</groupId>
     	<artifactId>luckystar-service</artifactId>
       	<version>0.0.1-SNAPSHOT</version>
-    </dependency>   
-	<!-- https://mvnrepository.com/artifact/org.springframework/spring-webmvc -->
-	<dependency>
-	    <groupId>org.springframework</groupId>
-	    <artifactId>spring-webmvc</artifactId>
-	    <version>4.2.4.RELEASE</version>
-	</dependency>
-	     
+    </dependency>  
   </dependencies>
-  
-    <build>
-        <finalName>luckstar-admin</finalName>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.4</version>
-            </plugin>
-        </plugins>
-    </build>  
 </project>
