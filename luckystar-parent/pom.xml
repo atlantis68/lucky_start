@@ -20,5 +20,6 @@
     	<module>luckystar-service</module>
     	<module>luckystar-dao</module>
     	<module>luckystar-common</module>
+    	<module>luckystar-task</module>
     </modules>
 </project>
