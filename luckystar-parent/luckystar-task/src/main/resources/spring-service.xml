@@ -21,7 +21,7 @@
 		</property>
 	</bean>
 	
-    <context:component-scan base-package="org.luckystar.service"/>
+    <context:component-scan base-package="org.luckystar"/>
 
 	 <bean id="lsDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="url">
@@ -68,16 +68,10 @@
         </property>              
     </bean>	
     
-	<bean id="lsSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="lsDataSource" />
-		<property name="mapperLocations" value="classpath:/mapper/*Mapper.xml" />	
-	</bean>	 
-	
-    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="sqlSessionFactoryBeanName" value="lsSqlSessionFactory"/>      
-       <property name="basePackage" value="org.luckystar.dao" />
-    </bean>	
-    
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="lsDataSource"></property>
+	</bean>
+	 
 	<bean id="lsTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
         <property name="dataSource" ref="lsDataSource"></property>  
     </bean>   
