@@ -92,13 +92,6 @@ public class WorkTimeTask implements Runnable {
 									if(result.indexOf("正在直播") > -1) {
 										isOnline = true;
 									} 
-									int start = result.indexOf(key);
-									if(start > -1) {
-										int end = result.indexOf("|", start);
-										if(end > -1) {
-											chickenInfo.setNickName(result.substring(start + key.length(), end).trim());				
-										}
-									}
 									Date now = new Date(System.currentTimeMillis());
 									String curDay = dateFormat.format(now);
 									List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
@@ -112,32 +105,36 @@ public class WorkTimeTask implements Runnable {
 										workInfo.put("last_time", timeFormat.format(now));
 										dataBaseService.updateWorkInfo1(workInfo);
 									} else {
-										Map<String, Object> workInfo = new HashMap<String, Object>();
-										Date weeHours = timeFormat.parse(curDay + " 00:00:00");
-										workInfo.put("star_id", entry.getKey());
-										workInfo.put("l_id", chickenInfo.getlId());
-										if(isOnline) {
-											workInfo.put("work_time", (now.getTime() - weeHours.getTime()) / 1000);											
-										} else {
-											workInfo.put("work_time", 0);
-										}
-										workInfo.put("cur_month", monthFormat.format(now));
-										workInfo.put("cur_day", curDay);
-										workInfo.put("last_time", timeFormat.format(now));
-										dataBaseService.insertWorkInfo1(workInfo);
-										calendar.setTime(now);
-										calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
-										curDay = dateFormat.format(calendar.getTime());
-										count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
-										if(count != null && count.size() > 0) {
-											workInfo = count.get(0);
+										List<Map<String, Object>> taskInfo = dataBaseService.getTaskInfo(chickenInfo.getId(), monthFormat.format(now));
+										if(taskInfo != null && taskInfo.size() > 0) {
+											Map<String, Object> workInfo = new HashMap<String, Object>();
+											Date weeHours = timeFormat.parse(curDay + " 00:00:00");
+											workInfo.put("star_id", entry.getKey());
+											workInfo.put("l_id", chickenInfo.getlId());
 											if(isOnline) {
-												long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
-												int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-												workInfo.put("work_time", curWorkTime + (weeHours.getTime() - last) / 1000);											
+												workInfo.put("work_time", (now.getTime() - weeHours.getTime()) / 1000);											
+											} else {
+												workInfo.put("work_time", 0);
 											}
-											workInfo.put("last_time", timeFormat.format(weeHours));
-											dataBaseService.updateWorkInfo1(workInfo);
+											workInfo.put("cur_month", monthFormat.format(now));
+											workInfo.put("cur_day", curDay);
+											workInfo.put("last_time", timeFormat.format(now));
+											workInfo.put("task_info_id", taskInfo.get(0).get("id"));
+											dataBaseService.insertWorkInfo1(workInfo);
+											calendar.setTime(now);
+											calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+											curDay = dateFormat.format(calendar.getTime());
+											count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
+											if(count != null && count.size() > 0) {
+												workInfo = count.get(0);
+												if(isOnline) {
+													long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
+													int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
+													workInfo.put("work_time", curWorkTime + (weeHours.getTime() - last) / 1000);											
+												}
+												workInfo.put("last_time", timeFormat.format(weeHours));
+												dataBaseService.updateWorkInfo1(workInfo);
+											}
 										}
 									}
 								}

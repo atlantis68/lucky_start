@@ -13,11 +13,11 @@ public class DataBaseService {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	public List<Map<String, Object>> getLaborUnion(int state) {
+	public List<Map<String, Object>> getLaborUnion(String state) {
 		return jdbcTemplate.queryForList("select * from labor_union where state = ?", new Object[] {state});
 	}
 	
-	public List<Map<String, Object>> getChickenInfo(int state) {
+	public List<Map<String, Object>> getChickenInfo(String state) {
 		return jdbcTemplate.queryForList("select * from chicken_info where state = ?", new Object[] {state});
 	}
 	
@@ -26,18 +26,18 @@ public class DataBaseService {
 	}
 	
 	public void insertWorkInfo1(Map<String, Object> workInfo) {
-		jdbcTemplate.update("INSERT INTO work_info (star_id, l_id, work_time, cur_month, cur_day, last_time) VALUES(?, ?, ?, ?, ?, ?)",
-				new Object[] {workInfo.get("star_id"), workInfo.get("l_id"), workInfo.get("work_time"), 
-					workInfo.get("cur_month"), workInfo.get("cur_day"), workInfo.get("last_time")});
+		jdbcTemplate.update("INSERT INTO work_info (star_id, work_time, cur_month, cur_day, last_time, task_info_id) VALUES(?, ?, ?, ?, ?, ?)",
+				new Object[] {workInfo.get("star_id"), workInfo.get("work_time"), workInfo.get("cur_month"), 
+				workInfo.get("cur_day"), workInfo.get("last_time"), workInfo.get("task_info_id")});
 	}
 	
 	public void insertWorkInfo2(Map<String, Object> workInfo) {
-		jdbcTemplate.update("INSERT INTO work_info (star_id, l_id, star_level, rich_level, fisrt_bean, bean_total, coin, coin_total, fans_count, "
-				+ "follow_count, experience, cur_month, cur_day, last_time) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-				new Object[] {workInfo.get("star_id"), workInfo.get("l_id"), workInfo.get("star_level"), workInfo.get("rich_level"), 
+		jdbcTemplate.update("INSERT INTO work_info (star_id, star_level, rich_level, fisrt_bean, bean_total, coin, coin_total, fans_count, "
+				+ "follow_count, experience, cur_month, cur_day, last_time, task_info_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+				new Object[] {workInfo.get("star_id"), workInfo.get("star_level"), workInfo.get("rich_level"), 
 						workInfo.get("fisrt_bean"), workInfo.get("bean_total"), workInfo.get("coin"), workInfo.get("coin_total"), 
 						workInfo.get("fans_count"), workInfo.get("follow_count"), workInfo.get("experience"), 
-						workInfo.get("cur_month"), workInfo.get("cur_day"), workInfo.get("last_time")});
+						workInfo.get("cur_month"), workInfo.get("cur_day"), workInfo.get("last_time"), workInfo.get("task_info_id")});
 	}
 	
 	public void updateWorkInfo1(Map<String, Object> workInfo) {
@@ -51,5 +51,14 @@ public class DataBaseService {
 				new Object[] {workInfo.get("star_level"), workInfo.get("rich_level"), workInfo.get("bean_total"), 
 				workInfo.get("coin"), workInfo.get("coin_total"), workInfo.get("fans_count"), 
 				workInfo.get("follow_count"), workInfo.get("experience"), workInfo.get("id")});
+	}
+	
+	public List<Map<String, Object>> getTaskInfo(long id, String curMonth) {
+		return jdbcTemplate.queryForList("select * from task_info where id = ? and cur_month = ?", new Object[] {id, curMonth});
+	}
+	
+	public void updateChickenInfo(long id, String nick_name) {
+		jdbcTemplate.update("UPDATE chicken_info SET nick_name = ? where id = ?",
+				new Object[] {nick_name, id});
 	}
 }

@@ -14,7 +14,6 @@ import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
 import org.luckystar.service.DataBaseService;
 import org.luckystar.service.HttpService;
-import org.luckystar.util.JsonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,22 +107,32 @@ public class ChickenInfoTask implements Runnable {
 											workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
 											dataBaseService.updateWorkInfo2(workInfo);
 										} else {
-											Map<String, Object> workInfo = new HashMap<String, Object>();
-											workInfo.put("star_id", entry.getKey());
-											workInfo.put("l_id", chickenInfo.getlId());
-											workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
-											workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-											workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
-											workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
-											workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
-											workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
-											workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
-											workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
-											workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
-											workInfo.put("cur_month", monthFormat.format(now));
-											workInfo.put("cur_day", curDay);
-											workInfo.put("last_time", timeFormat.format(now));
-											dataBaseService.insertWorkInfo2(workInfo);
+											List<Map<String, Object>> taskInfo = dataBaseService.getTaskInfo(chickenInfo.getId(), monthFormat.format(now));
+											if(taskInfo != null && taskInfo.size() > 0) {
+												Map<String, Object> workInfo = new HashMap<String, Object>();
+												workInfo.put("star_id", entry.getKey());
+												workInfo.put("l_id", chickenInfo.getlId());
+												workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
+												workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
+												workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+												workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+												workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
+												workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
+												workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
+												workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
+												workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
+												workInfo.put("cur_month", monthFormat.format(now));
+												workInfo.put("cur_day", curDay);
+												workInfo.put("last_time", timeFormat.format(now));
+												workInfo.put("task_info_id", taskInfo.get(0).get("id"));
+												dataBaseService.insertWorkInfo2(workInfo);
+											}											
+										}
+										Object nickName = userInfo.get("nickName");
+										if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
+												!chickenInfo.getNickName().equals(nickName.toString()))) {
+											dataBaseService.updateChickenInfo(chickenInfo.getId(), nickName.toString());
+											chickenInfo.setNickName(nickName.toString());
 										}
 									}
 								}

@@ -32,7 +32,7 @@ public class CacheTask extends TimerTask {
 	public void run() {
 		try {
 			Map<Integer, LaborUnion> newLaborUnionCache = new HashMap<Integer, LaborUnion>();
-			List<Map<String, Object>> laborUnions = dataBaseService.getLaborUnion(1);
+			List<Map<String, Object>> laborUnions = dataBaseService.getLaborUnion("ON");
 			if(laborUnions != null) {
 				for(Map<String, Object> lu : laborUnions) {
 					LaborUnion laborUnion = new LaborUnion();
@@ -47,14 +47,16 @@ public class CacheTask extends TimerTask {
 				}
 			}
 			Map<Long, ChickenInfo> newChickenInfoCache = new HashMap<Long, ChickenInfo>();
-			List<Map<String, Object>> chickenInfos = dataBaseService.getChickenInfo(1);
+			List<Map<String, Object>> chickenInfos = dataBaseService.getChickenInfo("ON");
 			if(chickenInfos != null) {
 				for(Map<String, Object> ci : chickenInfos) {
 					ChickenInfo chickenInfo = new ChickenInfo();
+					chickenInfo.setId(Long.parseLong(ci.get("id").toString()));
 					long starId = Long.parseLong(ci.get("star_id").toString());
 					chickenInfo.setStarId(starId);
-					chickenInfo.setlId(Integer.parseInt(ci.get("l_id").toString()));
+					chickenInfo.setlId(Integer.parseInt(ci.get("labor_union_id").toString()));
 					chickenInfo.setUserName(ci.get("user_name").toString());
+					chickenInfo.setNickName(ci.get("nick_name") != null ? ci.get("nick_name").toString() : null);
 					chickenInfo.setRegDate(ci.get("reg_date").toString());
 					chickenInfo.setCookie(ci.get("cookie").toString());
 					chickenInfo.setTimeRate(Float.parseFloat(ci.get("time_rate").toString()));

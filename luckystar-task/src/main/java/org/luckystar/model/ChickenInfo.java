@@ -2,6 +2,8 @@ package org.luckystar.model;
 
 public class ChickenInfo {
 
+	private long id;
+
 	private long starId;
 
 	private int lId;
@@ -17,6 +19,14 @@ public class ChickenInfo {
 	private float timeRate;
 
 	private float beanRate;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public long getStarId() {
 		return starId;
@@ -84,9 +94,9 @@ public class ChickenInfo {
 
 	@Override
 	public String toString() {
-		return "ChickenInfo [starId=" + starId + ", lId=" + lId + ", userName=" + userName + ", nickName=" + nickName
-				+ ", regDate=" + regDate + ", cookie=" + cookie + ", timeRate=" + timeRate + ", beanRate=" + beanRate
-				+ "]";
+		return "ChickenInfo [id=" + id + ", starId=" + starId + ", lId=" + lId + ", userName=" + userName
+				+ ", nickName=" + nickName + ", regDate=" + regDate + ", cookie=" + cookie + ", timeRate=" + timeRate
+				+ ", beanRate=" + beanRate + "]";
 	}
 
 }
