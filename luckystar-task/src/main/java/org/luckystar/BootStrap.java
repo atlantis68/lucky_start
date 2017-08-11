@@ -23,12 +23,12 @@ public class BootStrap {
     	WorkTimeTask[] workTimeTasks = new WorkTimeTask[threadCount];
     	for(int i = 0; i < threadCount; i++) {
     		workTimeTasks[i] = (WorkTimeTask)context.getBean("workTimeTask");
-    		workTimeTasks[i].init(i, threadCount, 10);
+    		workTimeTasks[i].init(i, threadCount, 63);
     	}
     	ChickenInfoTask[] chickenInfoTasks = new ChickenInfoTask[threadCount];
     	for(int i = 0; i < threadCount; i++) {
     		chickenInfoTasks[i] = (ChickenInfoTask)context.getBean("chickenInfoTask");
-    		chickenInfoTasks[i].init(i, threadCount, 10);
+    		chickenInfoTasks[i].init(i, threadCount, 136);
     	}
     }
 

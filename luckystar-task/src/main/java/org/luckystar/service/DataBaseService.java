@@ -46,11 +46,11 @@ public class DataBaseService {
 	}
 	
 	public void updateWorkInfo2(Map<String, Object> workInfo) {
-		jdbcTemplate.update("UPDATE work_info SET star_level = ?, rich_level = ?, bean_total = ?, coin = ?, "
+		jdbcTemplate.update("UPDATE work_info SET star_level = ?, rich_level = ?, fisrt_bean = IF(ISNULL(fisrt_bean), ?, fisrt_bean), bean_total = ?, coin = ?, "
 				+ "coin_total = ?, fans_count = ?, follow_count = ?, experience = ? where id = ?",
 				new Object[] {workInfo.get("star_level"), workInfo.get("rich_level"), workInfo.get("bean_total"), 
-				workInfo.get("coin"), workInfo.get("coin_total"), workInfo.get("fans_count"), 
-				workInfo.get("follow_count"), workInfo.get("experience"), workInfo.get("id")});
+						workInfo.get("bean_total"), workInfo.get("coin"), workInfo.get("coin_total"), workInfo.get("fans_count"), 
+						workInfo.get("follow_count"), workInfo.get("experience"), workInfo.get("id")});
 	}
 	
 	public List<Map<String, Object>> getTaskInfo(long id, String curMonth) {
