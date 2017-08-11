@@ -70,7 +70,7 @@ public class CacheTask extends TimerTask {
 		} catch(Exception e) {
 			logger.error("{} : ", myName, e);
 		} finally {
-			logger.info("{}从数据库同步完成", myName);
+			logger.info("{} synchronized from database", myName);
 		}
 	}
 }

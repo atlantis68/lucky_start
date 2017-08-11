@@ -95,6 +95,8 @@ public class WorkTimeTask implements Runnable {
 									Date now = new Date(System.currentTimeMillis());
 									String curDay = dateFormat.format(now);
 									List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
+									logger.info("request work time succeeded, response code is {}, isOnline : {}, current time : {}", 
+											response.code(), isOnline, timeFormat.format(now));
 									if(count != null && count.size() > 0) {
 										Map<String, Object> workInfo = count.get(0);
 										if(isOnline) {
@@ -137,6 +139,8 @@ public class WorkTimeTask implements Runnable {
 											}
 										}
 									}
+								} else {
+									logger.info("request work time failed, response code is {}", response.code());
 								}
 							} catch(Exception e) {
 								logger.error("{} : ", entry.getKey(), e);

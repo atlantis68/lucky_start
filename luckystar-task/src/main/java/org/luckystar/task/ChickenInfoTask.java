@@ -95,6 +95,8 @@ public class ChickenInfoTask implements Runnable {
 										Date now = new Date(System.currentTimeMillis());
 										String curDay = dateFormat.format(now);
 										List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
+										logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
+												response.code(), userInfo, timeFormat.format(now));
 										if(count != null && count.size() > 0) {
 											Map<String, Object> workInfo = count.get(0);
 											workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
@@ -131,11 +133,14 @@ public class ChickenInfoTask implements Runnable {
 										Object nickName = userInfo.get("nickName");
 										if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
 												!chickenInfo.getNickName().equals(nickName.toString()))) {
+											logger.info("nickname is null or has changed, new name is {}", nickName);
 											dataBaseService.updateChickenInfo(chickenInfo.getId(), nickName.toString());
 											chickenInfo.setNickName(nickName.toString());
 										}
+									} else {
+										logger.info("request chicken info failed, response code is {}", response.code());
 									}
-								}
+								} 
 							} catch(Exception e) {
 								logger.error("{} : ", entry.getKey(), e);
 							}

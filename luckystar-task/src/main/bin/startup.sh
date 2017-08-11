@@ -34,17 +34,8 @@ if [ -z "$JAVA" ]; then
 fi
 
 str=`file -L $JAVA | grep 64-bit`
-if [ -n "$str" ]; then
-#	JAVA_OPTS="-server -Xms2048m -Xmx3072m -Xmn1024m -XX:SurvivorRatio=2 -XX:PermSize=96m -XX:MaxPermSize=256m -Xss256k -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError"
-#	JAVA_OPTS="-server -Xms1024m -Xmx1024m -Xmn640m -XX:SurvivorRatio=6 -XX:PermSize=96m -XX:MaxPermSize=128m -Xss256k -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError"
-#	JAVA_OPTS="-server -Xms1024m -Xmx1024m -Xmn640m -XX:SurvivorRatio=6 -XX:PermSize=96m -XX:MaxPermSize=128m -Xss256k -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -Xloggc:../logs/gc.log"
-#	JAVA_OPTS="-server -Xms1024m -Xmx1024m -Xmn640m -XX:SurvivorRatio=4 -XX:PermSize=96m -XX:MaxPermSize=256m -Xss256k -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled -XX:+UseCMSCompactAtFullCollection -XX:+UseFastAccessorMethods -XX:+UseCMSInitiatingOccupancyOnly -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -Xloggc:../logs/gc.log"
-	JAVA_OPTS="-server -Xms1024m -Xmx1024m -Xmn800m -XX:SurvivorRatio=32 -Xss256k -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -Xloggc:../logs/gc.log"
-else
-	JAVA_OPTS="-server -Xms1024m -Xmx1024m -XX:NewSize=256m -XX:MaxNewSize=256m -XX:MaxPermSize=128m "
-fi
+JAVA_OPTS="-server -Xms256m -Xmx256m -XX:NewSize=128m -XX:MaxNewSize=128m -XX:MaxPermSize=128m -XX:-UseAdaptiveSizePolicy -XX:MaxTenuringThreshold=15 -XX:+DisableExplicitGC -XX:+UseFastAccessorMethods -XX:+HeapDumpOnOutOfMemoryError -XX:+PrintGCDetails -Xloggc:../logs/gc.log"
 
-#JAVA_OPTS=" $JAVA_OPTS -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.port=7777 -Dcom.sun.management.jmxremote"
 JAVA_OPTS=" $JAVA_OPTS -Djava.awt.headless=true -Djava.net.preferIPv4Stack=true -Dfile.encoding=UTF-8"
 BASELINE_OPTS="-DappName=datacurator-baseline -Dlogback.configurationFile=$logback_configurationFile"
 
