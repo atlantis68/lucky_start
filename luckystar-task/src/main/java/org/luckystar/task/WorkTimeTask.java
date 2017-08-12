@@ -36,7 +36,11 @@ public class WorkTimeTask implements Runnable {
 	
 	private int interval;
 	
-	private String key;
+	private String key1;
+	
+	private String key2;
+	
+	private String key3;
 	
 	private SimpleDateFormat monthFormat;
 	
@@ -54,7 +58,9 @@ public class WorkTimeTask implements Runnable {
 		this.num = num;
 		this.interval = interval;
 		myName = "worktime_task_" + seq;
-		key = "<title>";
+		key1 = "明星级别:";
+		key2 = "财富级别:";
+		key3 = "'";
 		monthFormat = new SimpleDateFormat("yyyyMM");
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -89,8 +95,24 @@ public class WorkTimeTask implements Runnable {
 								if(response != null && response.isSuccessful()) {
 									String result = response.body().string();
 									boolean isOnline = false;
+									String starName = "";
+									String richName = "";
 									if(result.indexOf("正在直播") > -1) {
 										isOnline = true;
+										int start = result.indexOf(key1);
+										if(start > -1) {
+											int end = result.indexOf(key3, start);
+											if(end > start) {
+												starName = result.substring(start + key1.length(), end);
+											}
+										}
+										start = result.indexOf(key2);
+										if(start > -1) {
+											int end = result.indexOf(key3, start);
+											if(end > start) {
+												richName = result.substring(start + key2.length(), end);
+											}
+										}
 									} 
 									Date now = new Date(System.currentTimeMillis());
 									String curDay = dateFormat.format(now);
@@ -102,7 +124,9 @@ public class WorkTimeTask implements Runnable {
 										if(isOnline) {
 											long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 											int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-											workInfo.put("work_time", curWorkTime + (now.getTime() - last) / 1000);											
+											workInfo.put("work_time", curWorkTime + (now.getTime() - last) / 1000);
+											workInfo.put("star_name", starName);
+											workInfo.put("rich_name", richName);
 										}
 										workInfo.put("last_time", timeFormat.format(now));
 										dataBaseService.updateWorkInfo1(workInfo);
@@ -114,7 +138,7 @@ public class WorkTimeTask implements Runnable {
 											workInfo.put("star_id", entry.getKey());
 											workInfo.put("l_id", chickenInfo.getlId());
 											if(isOnline) {
-												workInfo.put("work_time", (now.getTime() - weeHours.getTime()) / 1000);											
+												workInfo.put("work_time", (now.getTime() - weeHours.getTime()) / 1000);
 											} else {
 												workInfo.put("work_time", 0);
 											}

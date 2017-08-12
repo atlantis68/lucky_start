@@ -12,7 +12,17 @@ public class ChickenInfo {
 
 	private String nickName;
 
+	private String phoneNumber;
+
+	private String QQ;
+
+	private String weChat;
+
 	private String regDate;
+
+	private String loginName;
+
+	private String password;
 
 	private String cookie;
 
@@ -60,12 +70,52 @@ public class ChickenInfo {
 		this.nickName = nickName;
 	}
 
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getQQ() {
+		return QQ;
+	}
+
+	public void setQQ(String qQ) {
+		QQ = qQ;
+	}
+
+	public String getWeChat() {
+		return weChat;
+	}
+
+	public void setWeChat(String weChat) {
+		this.weChat = weChat;
+	}
+
 	public String getRegDate() {
 		return regDate;
 	}
 
 	public void setRegDate(String regDate) {
 		this.regDate = regDate;
+	}
+
+	public String getLoginName() {
+		return loginName;
+	}
+
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getCookie() {
@@ -95,8 +145,9 @@ public class ChickenInfo {
 	@Override
 	public String toString() {
 		return "ChickenInfo [id=" + id + ", starId=" + starId + ", lId=" + lId + ", userName=" + userName
-				+ ", nickName=" + nickName + ", regDate=" + regDate + ", cookie=" + cookie + ", timeRate=" + timeRate
-				+ ", beanRate=" + beanRate + "]";
+				+ ", nickName=" + nickName + ", phoneNumber=" + phoneNumber + ", QQ=" + QQ + ", weChat=" + weChat
+				+ ", regDate=" + regDate + ", loginName=" + loginName + ", password=" + password + ", cookie=" + cookie
+				+ ", timeRate=" + timeRate + ", beanRate=" + beanRate + "]";
 	}
 
 }
