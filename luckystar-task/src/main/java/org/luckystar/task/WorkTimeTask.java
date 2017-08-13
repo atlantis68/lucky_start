@@ -102,21 +102,21 @@ public class WorkTimeTask implements Runnable {
 										String richName = "";
 										if(result.indexOf("正在直播") > -1) {
 											isOnline = true;
-											int start = result.indexOf(key1);
-											if(start > -1) {
-												int end = result.indexOf(key3, start);
-												if(end > start) {
-													starName = result.substring(start + key1.length(), end);
-												}
-											}
-											start = result.indexOf(key2);
-											if(start > -1) {
-												int end = result.indexOf(key3, start);
-												if(end > start) {
-													richName = result.substring(start + key2.length(), end);
-												}
-											}
 										} 
+										int start = result.indexOf(key1);
+										if(start > -1) {
+											int end = result.indexOf(key3, start);
+											if(end > start) {
+												starName = result.substring(start + key1.length(), end);
+											}
+										}
+										start = result.indexOf(key2);
+										if(start > -1) {
+											int end = result.indexOf(key3, start);
+											if(end > start) {
+												richName = result.substring(start + key2.length(), end);
+											}
+										}
 										Date now = new Date(System.currentTimeMillis());
 										String curDay = dateFormat.format(now);
 										List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
@@ -128,9 +128,9 @@ public class WorkTimeTask implements Runnable {
 												long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 												int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
 												workInfo.put("work_time", curWorkTime + (now.getTime() - last) / 1000);
-												workInfo.put("star_name", starName);
-												workInfo.put("rich_name", richName);
 											}
+											workInfo.put("star_name", starName);
+											workInfo.put("rich_name", richName);
 											workInfo.put("last_time", timeFormat.format(now));
 											dataBaseService.updateWorkInfo1(workInfo);
 										} else {
