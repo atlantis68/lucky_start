@@ -8,6 +8,8 @@ public class LaborUnion {
 
 	private String regDate;
 
+	private String type;
+
 	public int getlId() {
 		return lId;
 	}
@@ -32,9 +34,17 @@ public class LaborUnion {
 		this.regDate = regDate;
 	}
 
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
 	@Override
 	public String toString() {
-		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + "]";
+		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + "]";
 	}
 
 }

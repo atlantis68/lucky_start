@@ -18,7 +18,7 @@ public class DataBaseService {
 	}
 	
 	public List<Map<String, Object>> getChickenInfo(String state) {
-		return jdbcTemplate.queryForList("select * from chicken_info where state = ?", new Object[] {state});
+		return jdbcTemplate.queryForList("select * from user_info where state = ?", new Object[] {state});
 	}
 	
 	public List<Map<String, Object>> checkWorkInfo(long starId, String curDay) {
@@ -40,7 +40,7 @@ public class DataBaseService {
 						workInfo.get("cur_month"), workInfo.get("cur_day"), workInfo.get("last_time"), workInfo.get("task_info_id")});
 	}
 	
-	public void updateWorkInfo1(Map<String, Object> workInfo) {
+	public void updateWorkInfo1(Map<String, Object> workInfo) {	
 		jdbcTemplate.update("UPDATE work_info SET star_name = ?, rich_name = ?, work_time = ?, last_time = ? where id = ?",
 				new Object[] {workInfo.get("star_name"), workInfo.get("rich_name"), 
 				workInfo.get("work_time"), workInfo.get("last_time"), workInfo.get("id")});
@@ -59,7 +59,7 @@ public class DataBaseService {
 	}
 	
 	public void updateChickenInfo(long id, String nick_name) {
-		jdbcTemplate.update("UPDATE chicken_info SET nick_name = ? where id = ?",
+		jdbcTemplate.update("UPDATE user_info SET nick_name = ? where id = ?",
 				new Object[] {nick_name, id});
 	}
 }

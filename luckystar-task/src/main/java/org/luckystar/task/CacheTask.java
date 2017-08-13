@@ -36,11 +36,11 @@ public class CacheTask extends TimerTask {
 			if(laborUnions != null) {
 				for(Map<String, Object> lu : laborUnions) {
 					LaborUnion laborUnion = new LaborUnion();
-					int lId = Integer.parseInt(lu.get("l_id").toString());
-					laborUnion.setlId(lId);
+					laborUnion.setlId(Integer.parseInt(lu.get("l_id").toString()));
 					laborUnion.setName(lu.get("name").toString());
 					laborUnion.setRegDate(lu.get("reg_date").toString());
-					newLaborUnionCache.put(lId, laborUnion);
+					laborUnion.setType(lu.get("jhi_type").toString());
+					newLaborUnionCache.put(Integer.parseInt(lu.get("id").toString()), laborUnion);
 				}
 				synchronized (CacheInfo.laborUnionCache) {
 					CacheInfo.laborUnionCache = newLaborUnionCache;					
@@ -63,7 +63,7 @@ public class CacheTask extends TimerTask {
 					chickenInfo.setRegDate(ci.get("reg_date").toString());
 					chickenInfo.setCookie(ci.get("cookie").toString());
 					chickenInfo.setLoginName(ci.get("login_name").toString());
-					chickenInfo.setPassword(ci.get("password").toString());
+					chickenInfo.setPassword(ci.get("jhi_password").toString());
 					chickenInfo.setTimeRate(Float.parseFloat(ci.get("time_rate").toString()));
 					chickenInfo.setBeanRate(Float.parseFloat(ci.get("bean_rate").toString()));
 					newChickenInfoCache.put(starId, chickenInfo);
