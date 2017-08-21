@@ -95,8 +95,8 @@ public class ChickenInfoTask implements Runnable {
 										Date now = new Date(System.currentTimeMillis());
 										String curDay = dateFormat.format(now);
 										List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
-										logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
-												response.code(), userInfo, timeFormat.format(now));
+//										logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
+//												response.code(), userInfo, timeFormat.format(now));
 										if(count != null && count.size() > 0) {
 											Map<String, Object> workInfo = count.get(0);
 											workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);

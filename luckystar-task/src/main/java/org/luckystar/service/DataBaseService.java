@@ -55,7 +55,7 @@ public class DataBaseService {
 	}
 	
 	public List<Map<String, Object>> getTaskInfo(long id, String curMonth) {
-		return jdbcTemplate.queryForList("select * from task_info where id = ? and cur_month = ?", new Object[] {id, curMonth});
+		return jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
 	}
 	
 	public void updateChickenInfo(long id, String nick_name) {

@@ -61,7 +61,7 @@ public class CacheTask extends TimerTask {
 					chickenInfo.setQQ(ci.get("qq") != null ? ci.get("qq").toString() : null);
 					chickenInfo.setWeChat(ci.get("wei_chat") != null ? ci.get("wei_chat").toString() : null);
 					chickenInfo.setRegDate(ci.get("reg_date").toString());
-					chickenInfo.setCookie(ci.get("cookie").toString());
+					chickenInfo.setCookie(ci.get("cookie") != null ? ci.get("cookie").toString() : null);
 					chickenInfo.setLoginName(ci.get("login_name").toString());
 					chickenInfo.setPassword(ci.get("jhi_password").toString());
 					chickenInfo.setTimeRate(Float.parseFloat(ci.get("time_rate").toString()));
