@@ -168,7 +168,7 @@ public class WorkTimeTask implements Runnable {
 												}
 											}
 										} else {
-											logger.info("star_id {} is error", entry.getKey());
+											logger.info("star_id {} is error : {}", entry.getKey(), result);
 										}
 									} else {
 										logger.info("request work time failed, response code is {}", response.code());

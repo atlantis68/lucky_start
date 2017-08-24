@@ -90,55 +90,60 @@ public class ChickenInfoTask implements Runnable {
 									Response response = HttpService.sendHttp(request);
 									if(response != null && response.isSuccessful()) {
 										JSONObject result = JSON.parseObject(response.body().string());
-										JSONObject fxUserInfo = JSON.parseObject(result.get("data").toString());
-										JSONObject userInfo = JSON.parseObject(fxUserInfo.get("fxUserInfo").toString());
-										Date now = new Date(System.currentTimeMillis());
-										String curDay = dateFormat.format(now);
-										List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
-//										logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
-//												response.code(), userInfo, timeFormat.format(now));
-										if(count != null && count.size() > 0) {
-											Map<String, Object> workInfo = count.get(0);
-											workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
-											workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-											workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
-											workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
-											workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
-											workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
-											workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
-											workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
-											dataBaseService.updateWorkInfo2(workInfo);
-										} else {
-											List<Map<String, Object>> taskInfo = dataBaseService.getTaskInfo(chickenInfo.getId(), monthFormat.format(now));
-											if(taskInfo != null && taskInfo.size() > 0) {
-												Map<String, Object> workInfo = new HashMap<String, Object>();
-												workInfo.put("star_id", entry.getKey());
-												workInfo.put("l_id", chickenInfo.getlId());
+										String errorno = result.get("errorno").toString();
+										if(errorno.equals("0")) {
+											JSONObject fxUserInfo = JSON.parseObject(result.get("data").toString());
+											JSONObject userInfo = JSON.parseObject(fxUserInfo.get("fxUserInfo").toString());
+											Date now = new Date(System.currentTimeMillis());
+											String curDay = dateFormat.format(now);
+											List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
+//											logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
+//													response.code(), userInfo, timeFormat.format(now));
+											if(count != null && count.size() > 0) {
+												Map<String, Object> workInfo = count.get(0);
 												workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
 												workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-												workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
 												workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
 												workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
 												workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
 												workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
 												workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
 												workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
-												workInfo.put("cur_month", monthFormat.format(now));
-												workInfo.put("cur_day", curDay);
-												workInfo.put("last_time", timeFormat.format(now));
-												workInfo.put("task_info_id", taskInfo.get(0).get("id"));
-												dataBaseService.insertWorkInfo2(workInfo);
-											}											
-										}
-										Object nickName = userInfo.get("nickName");
-										if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
-												!chickenInfo.getNickName().equals(nickName.toString()))) {
-											logger.info("nickname is null or has changed, new name is {}", nickName);
-											dataBaseService.updateChickenInfo(chickenInfo.getId(), nickName.toString());
-											chickenInfo.setNickName(nickName.toString());
+												dataBaseService.updateWorkInfo2(workInfo);
+											} else {
+												List<Map<String, Object>> taskInfo = dataBaseService.getTaskInfo(chickenInfo.getId(), monthFormat.format(now));
+												if(taskInfo != null && taskInfo.size() > 0) {
+													Map<String, Object> workInfo = new HashMap<String, Object>();
+													workInfo.put("star_id", entry.getKey());
+													workInfo.put("l_id", chickenInfo.getlId());
+													workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
+													workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
+													workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+													workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+													workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
+													workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
+													workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
+													workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
+													workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
+													workInfo.put("cur_month", monthFormat.format(now));
+													workInfo.put("cur_day", curDay);
+													workInfo.put("last_time", timeFormat.format(now));
+													workInfo.put("task_info_id", taskInfo.get(0).get("id"));
+													dataBaseService.insertWorkInfo2(workInfo);
+												}											
+											}
+											Object nickName = userInfo.get("nickName");
+											if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
+													!chickenInfo.getNickName().equals(nickName.toString()))) {
+												logger.info("nickname is null or has changed, new name is {}", nickName);
+												dataBaseService.updateChickenInfo(chickenInfo.getId(), nickName.toString());
+												chickenInfo.setNickName(nickName.toString());
+											}
+										} else {
+											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
 										}
 									} else {
-										logger.info("request chicken info failed, response code is {}", response.code());
+										logger.info("request user info failed, response code is {}", response.code());
 									}
 								} 
 							} catch(Exception e) {
