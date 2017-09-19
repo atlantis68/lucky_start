@@ -50,23 +50,28 @@ public class CacheTask extends TimerTask {
 			List<Map<String, Object>> chickenInfos = dataBaseService.getChickenInfo("ON");
 			if(chickenInfos != null) {
 				for(Map<String, Object> ci : chickenInfos) {
-					ChickenInfo chickenInfo = new ChickenInfo();
-					chickenInfo.setId(Long.parseLong(ci.get("id").toString()));
-					long starId = Long.parseLong(ci.get("star_id").toString());
-					chickenInfo.setStarId(starId);
-					chickenInfo.setlId(Integer.parseInt(ci.get("labor_union_id").toString()));
-					chickenInfo.setUserName(ci.get("user_name").toString());
-					chickenInfo.setNickName(ci.get("nick_name") != null ? ci.get("nick_name").toString() : null);
-					chickenInfo.setPhoneNumber(ci.get("phone_number") != null ? ci.get("phone_number").toString() : null);
-					chickenInfo.setQQ(ci.get("qq") != null ? ci.get("qq").toString() : null);
-					chickenInfo.setWeChat(ci.get("wei_chat") != null ? ci.get("wei_chat").toString() : null);
-					chickenInfo.setRegDate(ci.get("reg_date").toString());
-					chickenInfo.setCookie(ci.get("cookie") != null ? ci.get("cookie").toString() : null);
-					chickenInfo.setLoginName(ci.get("login_name") != null ? ci.get("login_name").toString() : null);
-					chickenInfo.setPassword(ci.get("jhi_password") != null ? ci.get("jhi_password").toString() : null);
-					chickenInfo.setTimeRate(Float.parseFloat(ci.get("time_rate").toString()));
-					chickenInfo.setBeanRate(Float.parseFloat(ci.get("bean_rate").toString()));
-					newChickenInfoCache.put(starId, chickenInfo);
+					int lId = Integer.parseInt(ci.get("labor_union_id").toString());
+					if(CacheInfo.laborUnionCache.containsKey(lId)) {
+						ChickenInfo chickenInfo = new ChickenInfo();
+						chickenInfo.setId(Long.parseLong(ci.get("id").toString()));
+						long starId = Long.parseLong(ci.get("star_id").toString().trim());
+						chickenInfo.setStarId(starId);
+						chickenInfo.setlId(lId);
+						chickenInfo.setUserName(ci.get("user_name").toString());
+						chickenInfo.setNickName(ci.get("nick_name") != null ? ci.get("nick_name").toString() : null);
+						chickenInfo.setPhoneNumber(ci.get("phone_number") != null ? ci.get("phone_number").toString() : null);
+						chickenInfo.setQQ(ci.get("qq") != null ? ci.get("qq").toString() : null);
+						chickenInfo.setWeChat(ci.get("wei_chat") != null ? ci.get("wei_chat").toString() : null);
+						chickenInfo.setRegDate(ci.get("reg_date").toString());
+						chickenInfo.setCookie(ci.get("cookie") != null ? ci.get("cookie").toString() : null);
+						chickenInfo.setLoginName(ci.get("login_name") != null ? ci.get("login_name").toString() : null);
+						chickenInfo.setPassword(ci.get("jhi_password") != null ? ci.get("jhi_password").toString() : null);
+						chickenInfo.setTimeRate(Float.parseFloat(ci.get("time_rate").toString()));
+						chickenInfo.setBeanRate(Float.parseFloat(ci.get("bean_rate").toString()));
+						newChickenInfoCache.put(starId, chickenInfo);
+					} else {
+						logger.info("{} in labor union {} is not exists", ci.get("star_id"), lId);
+					}
 				}
 				synchronized (CacheInfo.chickenInfoCache) {
 					CacheInfo.chickenInfoCache = newChickenInfoCache;					

@@ -47,13 +47,16 @@ public class ChickenInfoTask implements Runnable {
 	
 	private Calendar calendar;
 	
+	private int diff;
+	
 	@Autowired
 	private DataBaseService dataBaseService;
 
-	public void init(int seq, int num, int interval) {
+	public void init(int seq, int num, int interval, int diff) {
 		this.seq = seq;
 		this.num = num;
 		this.interval = interval;
+		this.diff = diff;
 		myName = "chickeninfo_task_" + seq;
 		monthFormat = new SimpleDateFormat("yyyyMM");
 		dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -86,7 +89,7 @@ public class ChickenInfoTask implements Runnable {
 									    .addHeader("X-Requested-With", "XMLHttpRequest")
 					    			    .addHeader("Cookie", chickenInfo.getCookie())
 									    .build();
-									Thread.sleep(new Random().nextInt(interval * 33));
+									Thread.sleep(new Random().nextInt(interval * diff));
 									Response response = HttpService.sendHttp(request);
 									if(response != null && response.isSuccessful()) {
 										JSONObject result = JSON.parseObject(response.body().string());

@@ -1,5 +1,7 @@
 package org.luckystar;
 
+import java.util.Properties;
+
 import org.luckystar.task.CacheTask;
 import org.luckystar.task.ChickenInfoTask;
 import org.luckystar.task.WorkTimeTask;
@@ -16,20 +18,34 @@ public class BootStrap {
 
 	
     public static void main( String[] args ) {
-    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
-    	CacheTask cacheTask = (CacheTask)context.getBean("cacheTask");
-    	cacheTask.init();
-    	int threadCount = 20;
-    	WorkTimeTask[] workTimeTasks = new WorkTimeTask[threadCount];
-    	for(int i = 0; i < threadCount; i++) {
-    		workTimeTasks[i] = (WorkTimeTask)context.getBean("workTimeTask");
-    		workTimeTasks[i].init(i, threadCount, 63);
-    	}
-    	ChickenInfoTask[] chickenInfoTasks = new ChickenInfoTask[threadCount];
-    	for(int i = 0; i < threadCount; i++) {
-    		chickenInfoTasks[i] = (ChickenInfoTask)context.getBean("chickenInfoTask");
-    		chickenInfoTasks[i].init(i, threadCount, 136);
-    	}
+    	try {
+    		Properties properties = new Properties();
+			properties.load(BootStrap.class.getResourceAsStream("/sys.properties"));
+	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
+	    	CacheTask cacheTask = (CacheTask)context.getBean("cacheTask");
+	    	cacheTask.init();
+	    	int workTimeCount = Integer.parseInt(properties.get("ls.workTime.threadCount").toString().trim());
+	    	int workTimeInterval = Integer.parseInt(properties.get("ls.workTime.interval").toString().trim());
+	    	int workTimeDiff = Integer.parseInt(properties.get("ls.workTime.diff").toString().trim());
+	    	Float workTimeRate = Float.parseFloat(properties.get("ls.workTime.rate").toString().trim());
+	    	WorkTimeTask[] workTimeTasks = new WorkTimeTask[workTimeCount];
+	    	for(int i = 0; i < workTimeCount; i++) {
+	    		workTimeTasks[i] = (WorkTimeTask)context.getBean("workTimeTask");
+	    		workTimeTasks[i].init(i, workTimeCount, workTimeInterval, workTimeDiff, workTimeRate);
+	    	}
+	    	int userInfoCount = Integer.parseInt(properties.get("ls.userInfo.threadCount").toString().trim());
+	    	int userInfoInterval = Integer.parseInt(properties.get("ls.userInfo.interval").toString().trim());
+	    	int userInfoDiff = Integer.parseInt(properties.get("ls.userInfo.diff").toString().trim());
+	    	ChickenInfoTask[] chickenInfoTasks = new ChickenInfoTask[userInfoCount];
+	    	for(int i = 0; i < userInfoCount; i++) {
+	    		chickenInfoTasks[i] = (ChickenInfoTask)context.getBean("chickenInfoTask");
+	    		chickenInfoTasks[i].init(i, userInfoCount, userInfoInterval, userInfoDiff);
+	    	}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			System.exit(-1);
+		}
     }
 
 }

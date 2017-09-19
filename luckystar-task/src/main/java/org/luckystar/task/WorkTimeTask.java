@@ -50,13 +50,19 @@ public class WorkTimeTask implements Runnable {
 	
 	private Calendar calendar;
 	
+	private float rate;
+	
+	private int diff;
+	
 	@Autowired
 	private DataBaseService dataBaseService;
 
-	public void init(int seq, int num, int interval) {
+	public void init(int seq, int num, int interval, int diff, float rate) {
 		this.seq = seq;
 		this.num = num;
 		this.interval = interval;
+		this.diff = diff;
+		this.rate = rate;
 		myName = "worktime_task_" + seq;
 		key1 = "明星级别:";
 		key2 = "财富级别:";
@@ -93,7 +99,7 @@ public class WorkTimeTask implements Runnable {
 									    .addHeader("Referer", "http://fanxing.kugou.com/")
 									    .addHeader("X-Requested-With", "XMLHttpRequest")
 									    .build();
-									Thread.sleep(new Random().nextInt(interval * 33));
+									Thread.sleep(new Random().nextInt(interval * diff));
 									Response response = HttpService.sendHttp(request);
 									if(response != null && response.isSuccessful()) {
 										String result = response.body().string();
@@ -128,7 +134,7 @@ public class WorkTimeTask implements Runnable {
 												if(isOnline) {
 													long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 													int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-													workInfo.put("work_time", curWorkTime + (now.getTime() - last) / 1000);
+													workInfo.put("work_time", curWorkTime + (long)((now.getTime() - last) * rate / 1000));
 												}
 												workInfo.put("star_name", starName);
 												workInfo.put("rich_name", richName);
@@ -142,7 +148,7 @@ public class WorkTimeTask implements Runnable {
 													workInfo.put("star_id", entry.getKey());
 													workInfo.put("l_id", chickenInfo.getlId());
 													if(isOnline) {
-														workInfo.put("work_time", (now.getTime() - weeHours.getTime()) / 1000);
+														workInfo.put("work_time", (long)((now.getTime() - weeHours.getTime()) * rate / 1000));
 													} else {
 														workInfo.put("work_time", 0);
 													}
@@ -160,7 +166,7 @@ public class WorkTimeTask implements Runnable {
 														if(isOnline) {
 															long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 															int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-															workInfo.put("work_time", curWorkTime + (weeHours.getTime() - last) / 1000);											
+															workInfo.put("work_time", curWorkTime + (long)((weeHours.getTime() - last) * rate / 1000));											
 														}
 														workInfo.put("last_time", timeFormat.format(weeHours));
 														dataBaseService.updateWorkInfo1(workInfo);
@@ -168,7 +174,7 @@ public class WorkTimeTask implements Runnable {
 												}
 											}
 										} else {
-											logger.info("star_id {} is error : {}", entry.getKey(), result);
+//											logger.info("star_id {} is error : {}", entry.getKey(), result);
 										}
 									} else {
 										logger.info("request work time failed, response code is {}", response.code());

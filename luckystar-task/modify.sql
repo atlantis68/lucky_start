@@ -24,7 +24,8 @@ ALTER TABLE `labor_union`
 ALTER TABLE `task_info` 
    CHANGE `min_task` `min_task` INT(11) NOT NULL COMMENT '任务数', 
    CHANGE `max_task` `max_task` INT(11) NOT NULL COMMENT '目标数', 
-   CHANGE `cur_month` `cur_month` INT(11) NOT NULL COMMENT '月份';
+   CHANGE `cur_month` `cur_month` INT(11) NOT NULL COMMENT '月份',
+   ADD UNIQUE KEY(`user_info_id`, `cur_month`);
    
 ALTER TABLE `work_info` 
    CHANGE `star_id` `star_id` BIGINT(20) NOT NULL COMMENT '繁星id', 
