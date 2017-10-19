@@ -70,7 +70,7 @@ public class CacheTask extends TimerTask {
 						chickenInfo.setBeanRate(Float.parseFloat(ci.get("bean_rate").toString()));
 						newChickenInfoCache.put(starId, chickenInfo);
 					} else {
-						logger.info("{} in labor union {} is not exists", ci.get("star_id"), lId);
+//						logger.info("{} in labor union {} is not exists", ci.get("star_id"), lId);
 					}
 				}
 				synchronized (CacheInfo.chickenInfoCache) {

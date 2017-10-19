@@ -134,7 +134,10 @@ public class WorkTimeTask implements Runnable {
 												if(isOnline) {
 													long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 													int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-													workInfo.put("work_time", curWorkTime + (long)((now.getTime() - last) * rate / 1000));
+													long diff = (long)((now.getTime() - last) * rate / 1000);
+													workInfo.put("work_time", curWorkTime + diff);
+													logger.info("starId = {}, now = {}, last = {}, diff = {}", entry.getKey(), timeFormat.format(new Date(now.getTime())), 
+															timeFormat.format(new Date(last)), diff);
 												}
 												workInfo.put("star_name", starName);
 												workInfo.put("rich_name", richName);

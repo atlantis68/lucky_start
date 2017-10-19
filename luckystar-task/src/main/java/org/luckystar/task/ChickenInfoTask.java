@@ -112,6 +112,20 @@ public class ChickenInfoTask implements Runnable {
 												workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
 												workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
 												workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
+												if(workInfo.get("fisrt_bean") == null) {
+													calendar.setTime(now);
+													calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+													String yesDay = dateFormat.format(calendar.getTime());
+													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
+													if(count != null && count.size() > 0) {
+														Map<String, Object> yesWorkInfo = count.get(0);
+														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 0);
+														logger.info("update {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
+													} else {
+														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
+														logger.info("update {} bean using current data", chickenInfo.getStarId());
+													}
+												}
 												dataBaseService.updateWorkInfo2(workInfo);
 											} else {
 												List<Map<String, Object>> taskInfo = dataBaseService.getTaskInfo(chickenInfo.getId(), monthFormat.format(now));
@@ -121,7 +135,18 @@ public class ChickenInfoTask implements Runnable {
 													workInfo.put("l_id", chickenInfo.getlId());
 													workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
 													workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-													workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+													calendar.setTime(now);
+													calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+													String yesDay = dateFormat.format(calendar.getTime());
+													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
+													if(count != null && count.size() > 0) {
+														Map<String, Object> yesWorkInfo = count.get(0);
+														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 0);
+														logger.info("insert {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
+													} else {
+														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
+														logger.info("insert {} bean using current data", chickenInfo.getStarId());
+													}
 													workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
 													workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
 													workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
