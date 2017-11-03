@@ -151,7 +151,8 @@ public class WorkTimeTask implements Runnable {
 													workInfo.put("star_id", entry.getKey());
 													workInfo.put("l_id", chickenInfo.getlId());
 													if(isOnline) {
-														workInfo.put("work_time", (long)((now.getTime() - weeHours.getTime()) * rate / 1000));
+														long diff = (long)((now.getTime() - weeHours.getTime()) * rate / 1000);
+														workInfo.put("work_time", diff < interval * 3 ? diff : interval);
 													} else {
 														workInfo.put("work_time", 0);
 													}
@@ -169,7 +170,8 @@ public class WorkTimeTask implements Runnable {
 														if(isOnline) {
 															long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 															int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
-															workInfo.put("work_time", curWorkTime + (long)((weeHours.getTime() - last) * rate / 1000));											
+															long diff = (long)((weeHours.getTime() - last) * rate / 1000);
+															workInfo.put("work_time", curWorkTime + (diff < interval * 3 ? diff : 0l));											
 														}
 														workInfo.put("last_time", timeFormat.format(weeHours));
 														dataBaseService.updateWorkInfo1(workInfo);
