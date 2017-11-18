@@ -58,8 +58,13 @@ public class DataBaseService {
 		return jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
 	}
 	
-	public void updateChickenInfo(long id, String nick_name) {
+	public void updateNickName(long id, String nick_name) {
 		jdbcTemplate.update("UPDATE user_info SET nick_name = ? where id = ?",
 				new Object[] {nick_name, id});
+	}
+	
+	public void updateRoomId(long id, String room_id) {
+		jdbcTemplate.update("UPDATE user_info SET room_id = ? where id = ?",
+				new Object[] {room_id, id});
 	}
 }

@@ -12,6 +12,8 @@ public class ChickenInfo {
 
 	private String nickName;
 
+	private String roomId;
+
 	private String phoneNumber;
 
 	private String QQ;
@@ -68,6 +70,14 @@ public class ChickenInfo {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public String getRoomId() {
+		return roomId;
+	}
+
+	public void setRoomId(String roomId) {
+		this.roomId = roomId;
 	}
 
 	public String getPhoneNumber() {

@@ -164,8 +164,15 @@ public class ChickenInfoTask implements Runnable {
 											if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
 													!chickenInfo.getNickName().equals(nickName.toString()))) {
 												logger.info("nickname is null or has changed, new name is {}", nickName);
-												dataBaseService.updateChickenInfo(chickenInfo.getId(), nickName.toString());
+												dataBaseService.updateNickName(chickenInfo.getId(), nickName.toString());
 												chickenInfo.setNickName(nickName.toString());
+											}
+											Object roomId = userInfo.get("roomId");
+											if(roomId != null && (StringUtils.isEmpty(chickenInfo.getRoomId()) || 
+													!chickenInfo.getRoomId().equals(roomId.toString()))) {
+												logger.info("roomid is null or has changed, new roomid is {}", roomId);
+												dataBaseService.updateRoomId(chickenInfo.getId(), roomId.toString());
+												chickenInfo.setRoomId(roomId.toString());
 											}
 										} else {
 											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
