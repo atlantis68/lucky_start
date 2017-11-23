@@ -26,9 +26,9 @@ public class DataBaseService {
 	}
 	
 	public void insertWorkInfo1(Map<String, Object> workInfo) {
-		jdbcTemplate.update("INSERT INTO work_info (star_id, work_time, cur_month, cur_day, last_time, task_info_id) VALUES(?, ?, ?, ?, ?, ?)",
-				new Object[] {workInfo.get("star_id"), workInfo.get("work_time"), workInfo.get("cur_month"), 
-				workInfo.get("cur_day"), workInfo.get("last_time"), workInfo.get("task_info_id")});
+		jdbcTemplate.update("INSERT INTO work_info (star_id, work_time, cur_month, cur_day, last_time, online_status, task_info_id) "
+				+ "VALUES(?, ?, ?, ?, ?, ?, ?)", new Object[] {workInfo.get("star_id"), workInfo.get("work_time"), workInfo.get("cur_month"), 
+				workInfo.get("cur_day"), workInfo.get("last_time"), workInfo.get("online_status"), workInfo.get("task_info_id")});
 	}
 	
 	public void insertWorkInfo2(Map<String, Object> workInfo) {
@@ -41,9 +41,10 @@ public class DataBaseService {
 	}
 	
 	public void updateWorkInfo1(Map<String, Object> workInfo) {	
-		jdbcTemplate.update("UPDATE work_info SET star_name = ?, rich_name = ?, work_time = ?, last_time = ? where id = ?",
-				new Object[] {workInfo.get("star_name"), workInfo.get("rich_name"), 
-				workInfo.get("work_time"), workInfo.get("last_time"), workInfo.get("id")});
+		jdbcTemplate.update("UPDATE work_info SET star_name = ?, rich_name = ?, work_time = ?, "
+				+ "last_time = ?, online_status = ? where id = ?",
+				new Object[] {workInfo.get("star_name"), workInfo.get("rich_name"), workInfo.get("work_time"), 
+				workInfo.get("last_time"), workInfo.get("online_status"), workInfo.get("id")});
 	}
 	
 	public void updateWorkInfo2(Map<String, Object> workInfo) {
