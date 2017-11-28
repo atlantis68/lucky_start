@@ -55,10 +55,13 @@ public class TimeTask extends TimerTask {
 			}
 			CacheInfo.emailContent.clear();
 			for(Entry<Integer, StringBuffer> message : messages.entrySet()) {
-				String address = CacheInfo.laborUnionCache.get(message.getKey()).getEmail();
 				StringBuffer sb = message.getValue();
+				String address = CacheInfo.laborUnionCache.get(message.getKey()).getEmail();
 				if(StringUtils.isNotEmpty(address) && sb != null) {
-					sendMail("幸运星预警短信", sb.toString(), address);					
+					String[] addrs = address.split(",");
+					for(String addr : addrs) {
+						sendMail("幸运星预警短信", sb.toString(), addr);											
+					}
 				}
 			}
 		} catch(Exception e) {
