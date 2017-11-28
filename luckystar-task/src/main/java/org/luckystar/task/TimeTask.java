@@ -49,7 +49,7 @@ public class TimeTask extends TimerTask {
 							sb = new StringBuffer();
 							messages.put(user.getlId(), sb);
 						}
-						sb.append(user.getUserName()).append("/").append(user.getNickName()).append(":").append(message.getValue());
+						sb.append(laborUnion.getName()).append("/").append(user.getUserName()).append("(").append(user.getNickName()).append("):").append(message.getValue());
 					}
 				}
 			}
