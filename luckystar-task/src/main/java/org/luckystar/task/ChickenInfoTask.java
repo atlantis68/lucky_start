@@ -176,7 +176,9 @@ public class ChickenInfoTask implements Runnable {
 												chickenInfo.setRoomId(roomId.toString());
 											}
 										} else {
-											CacheInfo.emailContent.put(chickenInfo.getStarId(), result.get("errorcode").toString() + "<br>\r\n");
+											if(errorno.equals("100035031")) {
+												CacheInfo.emailContent.put(chickenInfo.getStarId(), result.get("errorcode").toString() + "<br>\r\n");												
+											}
 											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
 										}
 									} else {
