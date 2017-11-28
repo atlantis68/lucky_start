@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
@@ -79,7 +80,7 @@ public class WorkTimeTask implements Runnable {
 		while(true) {
 			try {
 				long lastTime = System.currentTimeMillis();
-				Map<Long, ChickenInfo> chickens = CacheInfo.chickenInfoCache;
+				ConcurrentHashMap<Long, ChickenInfo> chickens = CacheInfo.chickenInfoCache;
 				if(chickens != null) {
 					for(Entry<Long, ChickenInfo> entry : chickens.entrySet()) {
 						if(entry.getKey() % num == seq) {

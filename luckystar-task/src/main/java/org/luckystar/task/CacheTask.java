@@ -1,10 +1,10 @@
 package org.luckystar.task;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
@@ -28,10 +28,11 @@ public class CacheTask extends TimerTask {
 	public void init() {
 		new Timer(myName).schedule(this, 0, 5 * 60 * 1000);
 	}
+	
 	@Override
 	public void run() {
 		try {
-			Map<Integer, LaborUnion> newLaborUnionCache = new HashMap<Integer, LaborUnion>();
+			ConcurrentHashMap<Integer, LaborUnion> newLaborUnionCache = new ConcurrentHashMap<Integer, LaborUnion>();
 			List<Map<String, Object>> laborUnions = dataBaseService.getLaborUnion("ON");
 			if(laborUnions != null) {
 				for(Map<String, Object> lu : laborUnions) {
@@ -40,13 +41,14 @@ public class CacheTask extends TimerTask {
 					laborUnion.setName(lu.get("name").toString());
 					laborUnion.setRegDate(lu.get("reg_date").toString());
 					laborUnion.setType(lu.get("jhi_type").toString());
+					laborUnion.setEmail(lu.get("email").toString());
 					newLaborUnionCache.put(Integer.parseInt(lu.get("id").toString()), laborUnion);
 				}
 				synchronized (CacheInfo.laborUnionCache) {
 					CacheInfo.laborUnionCache = newLaborUnionCache;					
 				}
 			}
-			Map<Long, ChickenInfo> newChickenInfoCache = new HashMap<Long, ChickenInfo>();
+			ConcurrentHashMap<Long, ChickenInfo> newChickenInfoCache = new ConcurrentHashMap<Long, ChickenInfo>();
 			List<Map<String, Object>> chickenInfos = dataBaseService.getChickenInfo("ON");
 			if(chickenInfos != null) {
 				for(Map<String, Object> ci : chickenInfos) {

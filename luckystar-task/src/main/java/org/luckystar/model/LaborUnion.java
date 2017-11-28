@@ -10,6 +10,8 @@ public class LaborUnion {
 
 	private String type;
 
+	private String email;
+
 	public int getlId() {
 		return lId;
 	}
@@ -42,9 +44,18 @@ public class LaborUnion {
 		this.type = type;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	@Override
 	public String toString() {
-		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + "]";
+		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + ", email="
+				+ email + "]";
 	}
 
 }

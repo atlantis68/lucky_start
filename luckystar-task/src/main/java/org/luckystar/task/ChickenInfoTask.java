@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.luckystar.model.CacheInfo;
@@ -70,7 +71,7 @@ public class ChickenInfoTask implements Runnable {
 		while(true) {
 			try {
 				long lastTime = System.currentTimeMillis();
-				Map<Long, ChickenInfo> chickens = CacheInfo.chickenInfoCache;
+				ConcurrentHashMap<Long, ChickenInfo> chickens = CacheInfo.chickenInfoCache;
 				if(chickens != null) {
 					for(Entry<Long, ChickenInfo> entry : chickens.entrySet()) {
 						if(entry.getKey() % num == seq) {
@@ -175,6 +176,7 @@ public class ChickenInfoTask implements Runnable {
 												chickenInfo.setRoomId(roomId.toString());
 											}
 										} else {
+											CacheInfo.emailContent.put(chickenInfo.getStarId(), result.get("errorcode").toString() + "<br>\r\n");
 											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
 										}
 									} else {

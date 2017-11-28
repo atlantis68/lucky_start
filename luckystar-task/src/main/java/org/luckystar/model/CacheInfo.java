@@ -1,17 +1,19 @@
 package org.luckystar.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CacheInfo {
 
-	public static Map<Integer, LaborUnion> laborUnionCache;
+	public static ConcurrentHashMap<Integer, LaborUnion> laborUnionCache;
 	
-	public static Map<Long, ChickenInfo> chickenInfoCache;
+	public static ConcurrentHashMap<Long, ChickenInfo> chickenInfoCache;
+	
+	public static ConcurrentHashMap<Long, String> emailContent;
 	
 	static {
-		laborUnionCache = new HashMap<Integer, LaborUnion>();
-		chickenInfoCache = new HashMap<Long, ChickenInfo>();
+		laborUnionCache = new ConcurrentHashMap<Integer, LaborUnion>();
+		chickenInfoCache = new ConcurrentHashMap<Long, ChickenInfo>();
+		emailContent = new ConcurrentHashMap<Long, String>();
 	}
 	
 }

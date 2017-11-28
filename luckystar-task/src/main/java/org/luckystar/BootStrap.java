@@ -4,6 +4,7 @@ import java.util.Properties;
 
 import org.luckystar.task.CacheTask;
 import org.luckystar.task.ChickenInfoTask;
+import org.luckystar.task.TimeTask;
 import org.luckystar.task.WorkTimeTask;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -41,6 +42,8 @@ public class BootStrap {
 	    		chickenInfoTasks[i] = (ChickenInfoTask)context.getBean("chickenInfoTask");
 	    		chickenInfoTasks[i].init(i, userInfoCount, userInfoInterval, userInfoDiff);
 	    	}
+	    	TimeTask timeTask = new TimeTask();
+	    	timeTask.init();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
