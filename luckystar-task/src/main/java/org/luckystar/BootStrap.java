@@ -25,6 +25,7 @@ public class BootStrap {
 	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
 	    	CacheTask cacheTask = (CacheTask)context.getBean("cacheTask");
 	    	cacheTask.init();
+	    	Thread.sleep(5 * 1000);
 	    	int workTimeCount = Integer.parseInt(properties.get("ls.workTime.threadCount").toString().trim());
 	    	int workTimeInterval = Integer.parseInt(properties.get("ls.workTime.interval").toString().trim());
 	    	int workTimeDiff = Integer.parseInt(properties.get("ls.workTime.diff").toString().trim());
