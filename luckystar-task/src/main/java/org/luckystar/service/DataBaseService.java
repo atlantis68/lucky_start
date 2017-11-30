@@ -55,8 +55,15 @@ public class DataBaseService {
 						workInfo.get("follow_count"), workInfo.get("experience"), workInfo.get("id")});
 	}
 	
-	public List<Map<String, Object>> getTaskInfo(long id, String curMonth) {
-		return jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
+	public List<Map<String, Object>> doGetTaskInfo(long id, String curMonth) {
+		List<Map<String, Object>> taskInfo = jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
+		if(taskInfo == null || taskInfo.size() == 0) {
+			int success = jdbcTemplate.update("INSERT INTO task_info(min_task, max_task, cur_month, boundary_value, user_info_id) VALUE(-1, -1, " + curMonth + ", -1, " + id + ")");
+			if(success > 0) {
+				taskInfo = jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
+			}
+		}
+		return taskInfo;
 	}
 	
 	public void updateNickName(long id, String nick_name) {
