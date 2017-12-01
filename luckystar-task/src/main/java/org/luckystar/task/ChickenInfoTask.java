@@ -120,7 +120,8 @@ public class ChickenInfoTask implements Runnable {
 													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
 													if(count != null && count.size() > 0) {
 														Map<String, Object> yesWorkInfo = count.get(0);
-														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 0);
+														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
+															(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
 														logger.info("update {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
 													} else {
 														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
@@ -142,7 +143,8 @@ public class ChickenInfoTask implements Runnable {
 													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
 													if(count != null && count.size() > 0) {
 														Map<String, Object> yesWorkInfo = count.get(0);
-														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 0);
+														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
+															(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
 														logger.info("insert {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
 													} else {
 														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
