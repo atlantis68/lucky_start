@@ -3,6 +3,8 @@ package org.luckystar.service;
 import java.util.List;
 import java.util.Map;
 
+import org.luckystar.model.CacheInfo;
+import org.luckystar.model.LaborUnion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -55,10 +57,12 @@ public class DataBaseService {
 						workInfo.get("follow_count"), workInfo.get("experience"), workInfo.get("id")});
 	}
 	
-	public List<Map<String, Object>> doGetTaskInfo(long id, String curMonth) {
+	public List<Map<String, Object>> doGetTaskInfo(long id, Integer lId, String curMonth) {
 		List<Map<String, Object>> taskInfo = jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
 		if(taskInfo == null || taskInfo.size() == 0) {
-			int success = jdbcTemplate.update("INSERT INTO task_info(min_task, max_task, cur_month, boundary_value, user_info_id) VALUE(-1, -1, " + curMonth + ", -1, " + id + ")");
+			LaborUnion laborUnion = CacheInfo.laborUnionCache.get(lId);
+			int success = jdbcTemplate.update("INSERT INTO task_info(min_task, max_task, cur_month, boundary_value, user_info_id) "
+					+ "VALUE(" + laborUnion.getMinTask() + ", " + laborUnion.getMaxTask() + ", " + curMonth + ", " + laborUnion.getBoundaryValue() + ", " + id + ")");
 			if(success > 0) {
 				taskInfo = jdbcTemplate.queryForList("select * from task_info where user_info_id = ? and cur_month = ?", new Object[] {id, curMonth});
 			}

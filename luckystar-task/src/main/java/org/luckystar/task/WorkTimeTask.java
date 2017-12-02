@@ -148,7 +148,7 @@ public class WorkTimeTask implements Runnable {
 												workInfo.put("last_time", timeFormat.format(now));
 												dataBaseService.updateWorkInfo1(workInfo);
 											} else {
-												List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), monthFormat.format(now));
+												List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), chickenInfo.getlId(), monthFormat.format(now));
 												if(taskInfo != null && taskInfo.size() > 0) {
 													Map<String, Object> workInfo = new HashMap<String, Object>();
 													Date weeHours = timeFormat.parse(curDay + " 00:00:00");

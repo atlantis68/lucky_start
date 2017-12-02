@@ -130,7 +130,7 @@ public class ChickenInfoTask implements Runnable {
 												}
 												dataBaseService.updateWorkInfo2(workInfo);
 											} else {
-												List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), monthFormat.format(now));
+												List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), chickenInfo.getlId(), monthFormat.format(now));
 												if(taskInfo != null && taskInfo.size() > 0) {
 													Map<String, Object> workInfo = new HashMap<String, Object>();
 													workInfo.put("star_id", entry.getKey());

@@ -12,6 +12,12 @@ public class LaborUnion {
 
 	private String email;
 
+	private int minTask;
+
+	private int maxTask;
+
+	private int boundaryValue;
+
 	public int getlId() {
 		return lId;
 	}
@@ -52,10 +58,34 @@ public class LaborUnion {
 		this.email = email;
 	}
 
+	public int getMinTask() {
+		return minTask;
+	}
+
+	public void setMinTask(int minTask) {
+		this.minTask = minTask;
+	}
+
+	public int getMaxTask() {
+		return maxTask;
+	}
+
+	public void setMaxTask(int maxTask) {
+		this.maxTask = maxTask;
+	}
+
+	public int getBoundaryValue() {
+		return boundaryValue;
+	}
+
+	public void setBoundaryValue(int boundaryValue) {
+		this.boundaryValue = boundaryValue;
+	}
+
 	@Override
 	public String toString() {
 		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + ", email="
-				+ email + "]";
+				+ email + ", minTask=" + minTask + ", maxTask=" + maxTask + ", boundaryValue=" + boundaryValue + "]";
 	}
 
 }
