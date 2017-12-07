@@ -46,6 +46,7 @@ public class CacheTask extends TimerTask {
 					laborUnion.setMaxTask(lu.get("max_task") != null ? Integer.parseInt(lu.get("max_task").toString()) : -1);
 					laborUnion.setBoundaryValue(lu.get("boundary_value") != null ? 
 							Integer.parseInt(lu.get("boundary_value").toString()) : 240);
+					laborUnion.setAutoExchange(Boolean.parseBoolean(lu.get("auto_exchange").toString()));
 					newLaborUnionCache.put(Integer.parseInt(lu.get("id").toString()), laborUnion);
 				}
 				synchronized (CacheInfo.laborUnionCache) {

@@ -18,6 +18,8 @@ public class LaborUnion {
 
 	private int boundaryValue;
 
+	private boolean autoExchange;
+
 	public int getlId() {
 		return lId;
 	}
@@ -82,10 +84,19 @@ public class LaborUnion {
 		this.boundaryValue = boundaryValue;
 	}
 
+	public boolean isAutoExchange() {
+		return autoExchange;
+	}
+
+	public void setAutoExchange(boolean autoExchange) {
+		this.autoExchange = autoExchange;
+	}
+
 	@Override
 	public String toString() {
 		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + ", email="
-				+ email + ", minTask=" + minTask + ", maxTask=" + maxTask + ", boundaryValue=" + boundaryValue + "]";
+				+ email + ", minTask=" + minTask + ", maxTask=" + maxTask + ", boundaryValue=" + boundaryValue
+				+ ", autoExchange=" + autoExchange + "]";
 	}
 
 }

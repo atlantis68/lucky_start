@@ -2,6 +2,7 @@ package org.luckystar;
 
 import java.util.Properties;
 
+import org.luckystar.task.AutoExchangeTask;
 import org.luckystar.task.CacheTask;
 import org.luckystar.task.ChickenInfoTask;
 import org.luckystar.task.TimeTask;
@@ -45,6 +46,8 @@ public class BootStrap {
 	    	}
 	    	TimeTask timeTask = new TimeTask();
 	    	timeTask.init();
+	    	AutoExchangeTask atutoExchangeTask = new AutoExchangeTask();
+	    	atutoExchangeTask.init();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
