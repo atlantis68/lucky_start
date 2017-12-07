@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -32,7 +33,7 @@ public class TimeTask extends TimerTask {
 	private String myName = "time_task";
 
 	public void init() {
-		new Timer(myName).schedule(this, 0, 5 * 60 * 1000);
+		new Timer(myName).schedule(this, 0, 12 * 60 * 1000);
 	}
 	
 	@Override
@@ -60,6 +61,7 @@ public class TimeTask extends TimerTask {
 				if(StringUtils.isNotEmpty(address) && sb != null) {
 					String[] addrs = address.split(",");
 					for(String addr : addrs) {
+						Thread.sleep((long)(new Random().nextFloat() * 10000 + 5000));
 						sendMail("幸运星预警短信", sb.toString(), addr);											
 					}
 				}
