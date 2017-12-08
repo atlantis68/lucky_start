@@ -48,7 +48,7 @@ public class AutoExchangeTask extends TimerTask {
 		price = 12500;
 		cny = 100;
 		timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		new Timer(myName).schedule(this, 0, 68 * 60 * 1000);
+		new Timer(myName).schedule(this, 0, 60 * 60 * 1000);
 	}
 	
 	@Override
@@ -126,7 +126,7 @@ public class AutoExchangeTask extends TimerTask {
 						if(StringUtils.isNotEmpty(address) && sb != null) {
 							String[] addrs = address.split(",");
 							for(String addr : addrs) {
-								Thread.sleep((long)(new Random().nextFloat() * 20000 + 10000));
+								Thread.sleep((long)(new Random().nextFloat() * 60000 + 60000));
 								MailUtils.sendMail("幸运星自动兑换短信", sb.toString(), addr);											
 							}
 						}						

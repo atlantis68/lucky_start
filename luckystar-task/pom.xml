@@ -96,6 +96,13 @@
 	  	<artifactId>mail</artifactId>
 	  	<version>1.4</version>   
     </dependency>	
+	<!-- https://mvnrepository.com/artifact/javax.mail/mailapi -->
+	<dependency>
+	    <groupId>javax.mail</groupId>
+	    <artifactId>mailapi</artifactId>
+	    <version>1.4.3</version>
+	</dependency>
+    
   </dependencies>
   
 	<build>

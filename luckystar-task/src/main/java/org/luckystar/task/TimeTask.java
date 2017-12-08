@@ -24,7 +24,7 @@ public class TimeTask extends TimerTask {
 	private String myName = "time_task";
 
 	public void init() {
-		new Timer(myName).schedule(this, 0, 12 * 60 * 1000);
+		new Timer(myName).schedule(this, 0, 10 * 60 * 1000);
 	}
 	
 	@Override
@@ -53,7 +53,7 @@ public class TimeTask extends TimerTask {
 					if(StringUtils.isNotEmpty(address) && sb != null) {
 						String[] addrs = address.split(",");
 						for(String addr : addrs) {
-							Thread.sleep((long)(new Random().nextFloat() * 20000 + 10000));
+							Thread.sleep((long)(new Random().nextFloat() * 60000 + 60000));
 							MailUtils.sendMail("幸运星预警短信", sb.toString(), addr);											
 						}
 					}
