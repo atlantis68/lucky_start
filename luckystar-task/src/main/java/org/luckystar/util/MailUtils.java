@@ -72,7 +72,7 @@ public class MailUtils {
 				message.setFrom(fromAddress);
 				InternetAddress toAddress = new InternetAddress(receiver);
 				message.setRecipient(Message.RecipientType.TO, toAddress);
-				message.setSubject(props.getProperty("mail.user") + "_" + subject, "utf-8");
+				message.setSubject(subject, "utf-8");
 				message.setContent(content, "text/html;charset=utf-8");
 	 			Transport.send(message);
 	 			isSuccess = true;
