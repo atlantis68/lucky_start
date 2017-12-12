@@ -24,8 +24,11 @@ public class BootStrap {
     		Properties properties = new Properties();
 			properties.load(BootStrap.class.getResourceAsStream("/sys.properties"));
 	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
+	    	int cacheTaskDelay = Integer.parseInt(properties.get("ls.cacheTask.delay").toString().trim());
+	    	int cacheTaskPeriod = Integer.parseInt(properties.get("ls.cacheTask.period").toString().trim());
+	    	int cacheTaskBoundaryValue = Integer.parseInt(properties.get("ls.cacheTask.boundaryValue").toString().trim());
 	    	CacheTask cacheTask = (CacheTask)context.getBean("cacheTask");
-	    	cacheTask.init();
+	    	cacheTask.init(cacheTaskDelay, cacheTaskPeriod, cacheTaskBoundaryValue);
 	    	Thread.sleep(5 * 1000);
 	    	int workTimeCount = Integer.parseInt(properties.get("ls.workTime.threadCount").toString().trim());
 	    	int workTimeInterval = Integer.parseInt(properties.get("ls.workTime.interval").toString().trim());
@@ -44,10 +47,20 @@ public class BootStrap {
 	    		chickenInfoTasks[i] = (ChickenInfoTask)context.getBean("chickenInfoTask");
 	    		chickenInfoTasks[i].init(i, userInfoCount, userInfoInterval, userInfoDiff);
 	    	}
+	    	int mailRandom = Integer.parseInt(properties.get("ls.mail.random").toString().trim());
+	    	int mailFixed = Integer.parseInt(properties.get("ls.mail.fixed").toString().trim());
+	    	int timeTaskDelay = Integer.parseInt(properties.get("ls.timeTask.delay").toString().trim());
+	    	int timeTaskPeriod = Integer.parseInt(properties.get("ls.timeTask.period").toString().trim());
 	    	TimeTask timeTask = new TimeTask();
-	    	timeTask.init();
+	    	timeTask.init(timeTaskDelay, timeTaskPeriod, mailRandom, mailFixed);
+	    	int autoExchangeDelay = Integer.parseInt(properties.get("ls.autoExchange.delay").toString().trim());
+	    	int autoExchangePeriod = Integer.parseInt(properties.get("ls.autoExchange.period").toString().trim());
+	    	int autoExchangeMinNum = Integer.parseInt(properties.get("ls.autoExchange.minNum").toString().trim());
+	    	int autoExchangePrice = Integer.parseInt(properties.get("ls.autoExchange.price").toString().trim());
+	    	int autoExchangeCny = Integer.parseInt(properties.get("ls.autoExchange.cny").toString().trim());
 	    	AutoExchangeTask atutoExchangeTask = new AutoExchangeTask();
-	    	atutoExchangeTask.init();
+	    	atutoExchangeTask.init(autoExchangeDelay, autoExchangePeriod, autoExchangeMinNum, autoExchangePrice,
+	    			autoExchangeCny, mailRandom, mailFixed);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -27,7 +27,7 @@ public class AutoExchangeTask extends TimerTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(AutoExchangeTask.class);
 
-	private String myName = "exchange_task";
+	private String myName;
 	
 	private String startKey;
 
@@ -39,16 +39,23 @@ public class AutoExchangeTask extends TimerTask {
 	
 	private int cny;
 	
+	private int mailRandom;
+	
+	private int mailFixed;
+	
 	private SimpleDateFormat timeFormat;
 
-	public void init() {
+	public void init(int delay, int period, int minNum, int price, int cny, int mailRandom, int mailFixed) {
+		myName = "exchange_task";
 		startKey = "id=\"num_bean\">";
 		endKey = "</em>";
-		minNum = 5;
-		price = 12500;
-		cny = 100;
+		this.minNum = minNum;
+		this.price = price;
+		this.cny = cny;
+		this.mailRandom = mailRandom;
+		this.mailFixed = mailFixed;
 		timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		new Timer(myName).schedule(this, 0, 60 * 60 * 1000);
+		new Timer(myName).schedule(this, delay * 1000, period * 1000);
 	}
 	
 	@Override
@@ -126,7 +133,7 @@ public class AutoExchangeTask extends TimerTask {
 						if(StringUtils.isNotEmpty(address) && sb != null) {
 							String[] addrs = address.split(",");
 							for(String addr : addrs) {
-								Thread.sleep((long)(new Random().nextFloat() * 60000 + 60000));
+								Thread.sleep((long)(new Random().nextFloat() * mailRandom * 1000 + mailFixed * 1000));
 								MailUtils.sendMail("幸运星自动兑换短信", sb.toString(), addr);											
 							}
 						}						

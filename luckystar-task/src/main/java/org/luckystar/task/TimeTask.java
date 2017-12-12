@@ -21,10 +21,17 @@ public class TimeTask extends TimerTask {
 
 	private static final Logger logger = LoggerFactory.getLogger(TimeTask.class);
 
-	private String myName = "time_task";
+	private String myName;
+	
+	private int mailRandom;
+	
+	private int mailFixed;
 
-	public void init() {
-		new Timer(myName).schedule(this, 0, 10 * 60 * 1000);
+	public void init(int delay, int period, int mailRandom, int mailFixed) {
+		myName = "time_task";
+		this.mailRandom = mailRandom;
+		this.mailFixed = mailFixed;
+		new Timer(myName).schedule(this, delay * 1000, period * 1000);
 	}
 	
 	@Override
@@ -53,7 +60,7 @@ public class TimeTask extends TimerTask {
 					if(StringUtils.isNotEmpty(address) && sb != null) {
 						String[] addrs = address.split(",");
 						for(String addr : addrs) {
-							Thread.sleep((long)(new Random().nextFloat() * 60000 + 60000));
+							Thread.sleep((long)(new Random().nextFloat() * mailRandom * 1000 + mailFixed * 1000));
 							MailUtils.sendMail("幸运星预警短信", sb.toString(), addr);											
 						}
 					}

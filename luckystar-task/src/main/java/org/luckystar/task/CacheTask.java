@@ -24,9 +24,12 @@ public class CacheTask extends TimerTask {
 	private DataBaseService dataBaseService;
 	
 	private String myName = "cache_task";
+	
+	private int defaultBoundaryValue;
 
-	public void init() {
-		new Timer(myName).schedule(this, 0, 5 * 60 * 1000);
+	public void init(int cacheTaskDelay, int cacheTaskPeriod, int defaultBoundaryValue) {
+		this.defaultBoundaryValue = defaultBoundaryValue;
+		new Timer(myName).schedule(this, cacheTaskDelay, cacheTaskPeriod * 1000);
 	}
 	
 	@Override
@@ -45,7 +48,7 @@ public class CacheTask extends TimerTask {
 					laborUnion.setMinTask(lu.get("min_task") != null ? Integer.parseInt(lu.get("min_task").toString()) : -1);
 					laborUnion.setMaxTask(lu.get("max_task") != null ? Integer.parseInt(lu.get("max_task").toString()) : -1);
 					laborUnion.setBoundaryValue(lu.get("boundary_value") != null ? 
-							Integer.parseInt(lu.get("boundary_value").toString()) : 240);
+							Integer.parseInt(lu.get("boundary_value").toString()) : defaultBoundaryValue);
 					laborUnion.setAutoExchange(Boolean.parseBoolean(lu.get("auto_exchange").toString()));
 					newLaborUnionCache.put(Integer.parseInt(lu.get("id").toString()), laborUnion);
 				}
