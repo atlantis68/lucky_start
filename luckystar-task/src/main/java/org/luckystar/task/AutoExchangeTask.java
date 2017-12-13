@@ -133,7 +133,7 @@ public class AutoExchangeTask extends TimerTask {
 						if(StringUtils.isNotEmpty(address) && sb != null) {
 							String[] addrs = address.split(",");
 							for(String addr : addrs) {
-								MailUtils.sendMail("幸运星自动兑换通知", sb.toString(), addr, mailRandom, mailFixed);											
+								MailUtils.sendMail("幸运星自动兑换通知", sb.toString(), addr, lu.getName(), mailRandom, mailFixed);											
 							}
 						}						
 					} catch(Exception e) {

@@ -60,7 +60,7 @@ public class TimeTask extends TimerTask {
 					if(StringUtils.isNotEmpty(address) && sb != null) {
 						String[] addrs = address.split(",");
 						for(String addr : addrs) {
-							MailUtils.sendMail("幸运星预警通知", sb.toString(), addr, mailRandom, mailFixed);											
+							MailUtils.sendMail("幸运星预警通知", sb.toString(), addr, null, mailRandom, mailFixed);											
 						}
 					}
 				} catch(Exception e) {

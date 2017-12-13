@@ -57,7 +57,7 @@ public class MailUtils {
 //		platformMail.add(sinaProps);
 	}
 
-	public static void sendMail(String subject, String content, String receiver, int mailRandom, int mailFixed) {
+	public static void sendMail(String subject, String content, String receiver, String laborUnion, int mailRandom, int mailFixed) {
 		int curSeq = 0;
 		boolean isSuccess = false;
 		while(curSeq++ < maxRetry && !isSuccess) {
@@ -83,10 +83,10 @@ public class MailUtils {
 				message.setContent(content, "text/html;charset=utf-8");
 	 			Transport.send(message);
 	 			isSuccess = true;
-	 			logger.info("send mail to {} successful in {} times", receiver, curSeq);
+	 			logger.info("send mail to {}({}) successful in {} times", receiver, laborUnion, curSeq);
 			} catch(Exception e) {
 				e.printStackTrace();
-	 			logger.error("send mail to {} failed in {} times", receiver, curSeq);
+	 			logger.error("send mail to {}({}) failed in {} times", receiver, laborUnion, curSeq);
 			}	
 		}
 
