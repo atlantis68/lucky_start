@@ -83,10 +83,10 @@ public class MailUtils {
 				message.setContent(content, "text/html;charset=utf-8");
 	 			Transport.send(message);
 	 			isSuccess = true;
-	 			logger.info("send mail to {} successful in {} times", curSeq, receiver);
+	 			logger.info("send mail to {} successful in {} times", receiver, curSeq);
 			} catch(Exception e) {
 				e.printStackTrace();
-	 			logger.error("send mail to {} failed in {} times", curSeq, receiver);
+	 			logger.error("send mail to {} failed in {} times", receiver, curSeq);
 			}	
 		}
 
