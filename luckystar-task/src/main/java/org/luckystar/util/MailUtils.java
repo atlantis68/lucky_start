@@ -3,6 +3,7 @@ package org.luckystar.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -12,8 +13,13 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class MailUtils {
 	
+	private static final Logger logger = LoggerFactory.getLogger(MailUtils.class);
+
 	private static int seq;
 	
 	private static int maxRetry;
@@ -51,11 +57,12 @@ public class MailUtils {
 //		platformMail.add(sinaProps);
 	}
 
-	public static void sendMail(String subject, String content, String receiver) {
+	public static void sendMail(String subject, String content, String receiver, int mailRandom, int mailFixed) {
 		int curSeq = 0;
 		boolean isSuccess = false;
 		while(curSeq++ < maxRetry && !isSuccess) {
 			try {
+				Thread.sleep((long)(new Random().nextFloat() * mailRandom * 1000 + mailFixed * 1000));
 				Properties props = platformMail.get(seq++ % platformMail.size());
 				Session ssn = Session.getInstance(props, new Authenticator() {
 
@@ -76,8 +83,10 @@ public class MailUtils {
 				message.setContent(content, "text/html;charset=utf-8");
 	 			Transport.send(message);
 	 			isSuccess = true;
+	 			logger.info("send mail to {} successful in {} times", curSeq, receiver);
 			} catch(Exception e) {
 				e.printStackTrace();
+	 			logger.error("send mail to {} failed in {} times", curSeq, receiver);
 			}	
 		}
 
