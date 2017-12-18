@@ -28,7 +28,7 @@ public class MailUtils {
 	
 	static {
 		seq = 0;
-		maxRetry = 3;
+		maxRetry = 5;
 		platformMail = new ArrayList<Properties>();
 		Properties qqProps = new Properties();
 		qqProps.put("mail.smtp.host", "smtp.qq.com");
