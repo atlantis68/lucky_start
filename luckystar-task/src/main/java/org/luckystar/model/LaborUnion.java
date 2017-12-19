@@ -10,7 +10,9 @@ public class LaborUnion {
 
 	private String type;
 
-	private String email;
+	private String leaderEmail;
+
+	private String workerEmail;
 
 	private int minTask;
 
@@ -52,12 +54,20 @@ public class LaborUnion {
 		this.type = type;
 	}
 
-	public String getEmail() {
-		return email;
+	public String getLeaderEmail() {
+		return leaderEmail;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setLeaderEmail(String leaderEmail) {
+		this.leaderEmail = leaderEmail;
+	}
+
+	public String getWorkerEmail() {
+		return workerEmail;
+	}
+
+	public void setWorkerEmail(String workerEmail) {
+		this.workerEmail = workerEmail;
 	}
 
 	public int getMinTask() {
@@ -94,9 +104,9 @@ public class LaborUnion {
 
 	@Override
 	public String toString() {
-		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type + ", email="
-				+ email + ", minTask=" + minTask + ", maxTask=" + maxTask + ", boundaryValue=" + boundaryValue
-				+ ", autoExchange=" + autoExchange + "]";
+		return "LaborUnion [lId=" + lId + ", name=" + name + ", regDate=" + regDate + ", type=" + type
+				+ ", leaderEmail=" + leaderEmail + ", workerEmail=" + workerEmail + ", minTask=" + minTask
+				+ ", maxTask=" + maxTask + ", boundaryValue=" + boundaryValue + ", autoExchange=" + autoExchange + "]";
 	}
 
 }

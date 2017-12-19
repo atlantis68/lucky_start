@@ -56,7 +56,7 @@ public class TimeTask extends TimerTask {
 			for(Entry<Integer, StringBuffer> message : messages.entrySet()) {
 				try {
 					StringBuffer sb = message.getValue();
-					String address = CacheInfo.laborUnionCache.get(message.getKey()).getEmail();
+					String address = CacheInfo.laborUnionCache.get(message.getKey()).getWorkerEmail();
 					if(StringUtils.isNotEmpty(address) && sb != null) {
 						String[] addrs = address.split(",");
 						for(String addr : addrs) {

@@ -129,7 +129,7 @@ public class AutoExchangeTask extends TimerTask {
 						}
 					}
 					try {
-						String address = lu.getEmail();
+						String address = lu.getLeaderEmail();
 						if(StringUtils.isNotEmpty(address) && sb != null) {
 							String[] addrs = address.split(",");
 							for(String addr : addrs) {

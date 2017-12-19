@@ -44,7 +44,8 @@ public class CacheTask extends TimerTask {
 					laborUnion.setName(lu.get("name").toString());
 					laborUnion.setRegDate(lu.get("reg_date").toString());
 					laborUnion.setType(lu.get("jhi_type").toString());
-					laborUnion.setEmail(lu.get("email").toString());
+					laborUnion.setLeaderEmail(lu.get("leader_email") != null ? lu.get("leader_email").toString() : "");
+					laborUnion.setWorkerEmail(lu.get("worker_email") != null ? lu.get("worker_email").toString() : "");
 					laborUnion.setMinTask(lu.get("min_task") != null ? Integer.parseInt(lu.get("min_task").toString()) : -1);
 					laborUnion.setMaxTask(lu.get("max_task") != null ? Integer.parseInt(lu.get("max_task").toString()) : -1);
 					laborUnion.setBoundaryValue(lu.get("boundary_value") != null ? 
