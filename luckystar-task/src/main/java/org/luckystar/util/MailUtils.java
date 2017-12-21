@@ -37,7 +37,7 @@ public class MailUtils {
 		qqProps.put("mail.smtps.connectiontimeout", 10000);
 		qqProps.put("mail.smtp.port", "587");
 		qqProps.put("mail.user", "346411799@qq.com");
-		qqProps.put("mail.password", "gfzzbgwrkkhqbieb");
+		qqProps.put("mail.password", "jfbbcvqurpaycaga");
 		platformMail.add(qqProps);
 //		Properties wyProps = new Properties();
 //		wyProps.put("mail.smtp.host", "smtp.163.com");
