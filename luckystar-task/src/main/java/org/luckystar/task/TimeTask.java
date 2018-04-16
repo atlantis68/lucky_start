@@ -3,17 +3,19 @@ package org.luckystar.task;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import org.apache.commons.lang.StringUtils;
 import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
+import org.luckystar.model.EmailEntity;
 import org.luckystar.model.LaborUnion;
+import org.luckystar.service.DataBaseService;
 import org.luckystar.util.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +28,9 @@ public class TimeTask extends TimerTask {
 	private int mailRandom;
 	
 	private int mailFixed;
+	
+	@Autowired
+	private DataBaseService dataBaseService;
 
 	public void init(int delay, int period, int mailRandom, int mailFixed) {
 		myName = "time_task";
@@ -38,21 +43,32 @@ public class TimeTask extends TimerTask {
 	public void run() {
 		try {
 			Map<Integer, StringBuffer> messages = new HashMap<Integer, StringBuffer>();
-			for(Entry<Long, String> message : CacheInfo.emailContent.entrySet()) {
+			for(Entry<Long, EmailEntity> message : CacheInfo.emailContent.entrySet()) {
 				ChickenInfo user = CacheInfo.chickenInfoCache.get(message.getKey());
+				EmailEntity emailEntity = message.getValue();
 				if(user != null) {
 					LaborUnion laborUnion = CacheInfo.laborUnionCache.get(user.getlId());
 					if(laborUnion != null) {
+						if(emailEntity.getSendNum() > 10) {
+							emailEntity.setContent("Cookie长时间未修复，系统自动关闭该用户<br>\r\n");
+							dataBaseService.closeChicken(user.getId());
+						} else {
+							emailEntity.setSendNum(emailEntity.getSendNum() + 1);
+						}
 						StringBuffer sb = messages.get(user.getlId());
 						if(sb == null) {
 							sb = new StringBuffer();
 							messages.put(user.getlId(), sb);
 						}
-						sb.append(laborUnion.getName()).append("/").append(user.getUserName()).append("(").append(user.getNickName()).append("):").append(message.getValue());
+						sb.append(laborUnion.getName()).append("/").append(user.getUserName()).append("(").append(user.getNickName()).append("):").append(emailEntity.getContent());
+					} else {
+						emailEntity.setSendNum(0);
 					}
+				} else {
+					emailEntity.setSendNum(0);
 				}
 			}
-			CacheInfo.emailContent.clear();
+//			CacheInfo.emailContent.clear();
 			for(Entry<Integer, StringBuffer> message : messages.entrySet()) {
 				try {
 					StringBuffer sb = message.getValue();

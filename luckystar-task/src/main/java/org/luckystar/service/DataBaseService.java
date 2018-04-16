@@ -79,4 +79,9 @@ public class DataBaseService {
 		jdbcTemplate.update("UPDATE user_info SET room_id = ? where id = ?",
 				new Object[] {room_id, id});
 	}
+	
+	public void closeChicken(long id) {
+		jdbcTemplate.update("UPDATE user_info SET state = 'OFF' where id = ?",
+				new Object[] {id});
+	}
 }
