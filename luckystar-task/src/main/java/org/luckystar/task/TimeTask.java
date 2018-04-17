@@ -29,13 +29,16 @@ public class TimeTask extends TimerTask {
 	
 	private int mailFixed;
 	
+	private int maxSendNum;
+	
 	@Autowired
 	private DataBaseService dataBaseService;
 
-	public void init(int delay, int period, int mailRandom, int mailFixed) {
+	public void init(int delay, int period, int mailRandom, int mailFixed, int maxSendNum) {
 		myName = "time_task";
 		this.mailRandom = mailRandom;
 		this.mailFixed = mailFixed;
+		this.maxSendNum = maxSendNum;
 		new Timer(myName).schedule(this, delay * 1000, period * 1000);
 	}
 	
@@ -49,7 +52,7 @@ public class TimeTask extends TimerTask {
 				if(user != null) {
 					LaborUnion laborUnion = CacheInfo.laborUnionCache.get(user.getlId());
 					if(laborUnion != null) {
-						if(emailEntity.getSendNum() > 10) {
+						if(emailEntity.getSendNum() > maxSendNum) {
 							emailEntity.setContent("Cookie长时间未修复，系统自动关闭该用户<br>\r\n");
 							dataBaseService.closeChicken(user.getId());
 						} else {

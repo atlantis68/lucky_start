@@ -51,8 +51,9 @@ public class BootStrap {
 	    	int mailFixed = Integer.parseInt(properties.get("ls.mail.fixed").toString().trim());
 	    	int timeTaskDelay = Integer.parseInt(properties.get("ls.timeTask.delay").toString().trim());
 	    	int timeTaskPeriod = Integer.parseInt(properties.get("ls.timeTask.period").toString().trim());
+	    	int maxSendNum = Integer.parseInt(properties.get("ls.timeTask.maxsendnum").toString().trim());
 	    	TimeTask timeTask = (TimeTask)context.getBean("timeTask");
-	    	timeTask.init(timeTaskDelay, timeTaskPeriod, mailRandom, mailFixed);
+	    	timeTask.init(timeTaskDelay, timeTaskPeriod, mailRandom, mailFixed, maxSendNum);
 	    	int autoExchangeDelay = Integer.parseInt(properties.get("ls.autoExchange.delay").toString().trim());
 	    	int autoExchangePeriod = Integer.parseInt(properties.get("ls.autoExchange.period").toString().trim());
 	    	int autoExchangeMinNum = Integer.parseInt(properties.get("ls.autoExchange.minNum").toString().trim());
