@@ -51,14 +51,14 @@ public class BootStrap {
 	    	int mailFixed = Integer.parseInt(properties.get("ls.mail.fixed").toString().trim());
 	    	int timeTaskDelay = Integer.parseInt(properties.get("ls.timeTask.delay").toString().trim());
 	    	int timeTaskPeriod = Integer.parseInt(properties.get("ls.timeTask.period").toString().trim());
-	    	TimeTask timeTask = new TimeTask();
+	    	TimeTask timeTask = (TimeTask)context.getBean("timeTask");
 	    	timeTask.init(timeTaskDelay, timeTaskPeriod, mailRandom, mailFixed);
 	    	int autoExchangeDelay = Integer.parseInt(properties.get("ls.autoExchange.delay").toString().trim());
 	    	int autoExchangePeriod = Integer.parseInt(properties.get("ls.autoExchange.period").toString().trim());
 	    	int autoExchangeMinNum = Integer.parseInt(properties.get("ls.autoExchange.minNum").toString().trim());
 	    	int autoExchangePrice = Integer.parseInt(properties.get("ls.autoExchange.price").toString().trim());
 	    	int autoExchangeCny = Integer.parseInt(properties.get("ls.autoExchange.cny").toString().trim());
-	    	AutoExchangeTask atutoExchangeTask = new AutoExchangeTask();
+	    	AutoExchangeTask atutoExchangeTask = (AutoExchangeTask)context.getBean("atutoExchangeTask");
 	    	atutoExchangeTask.init(autoExchangeDelay, autoExchangePeriod, autoExchangeMinNum, autoExchangePrice,
 	    			autoExchangeCny, mailRandom, mailFixed);
 		} catch (Exception e) {
