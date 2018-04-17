@@ -59,8 +59,8 @@ public class BootStrap {
 	    	int autoExchangeMinNum = Integer.parseInt(properties.get("ls.autoExchange.minNum").toString().trim());
 	    	int autoExchangePrice = Integer.parseInt(properties.get("ls.autoExchange.price").toString().trim());
 	    	int autoExchangeCny = Integer.parseInt(properties.get("ls.autoExchange.cny").toString().trim());
-	    	AutoExchangeTask atutoExchangeTask = (AutoExchangeTask)context.getBean("atutoExchangeTask");
-	    	atutoExchangeTask.init(autoExchangeDelay, autoExchangePeriod, autoExchangeMinNum, autoExchangePrice,
+	    	AutoExchangeTask autoExchangeTask = (AutoExchangeTask)context.getBean("autoExchangeTask");
+	    	autoExchangeTask.init(autoExchangeDelay, autoExchangePeriod, autoExchangeMinNum, autoExchangePrice,
 	    			autoExchangeCny, mailRandom, mailFixed);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
