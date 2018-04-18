@@ -184,7 +184,9 @@ public class ChickenInfoTask implements Runnable {
 									} else {
 										logger.info("request user info failed, response code is {}", response.code());
 									}
-								} 
+								} else {
+									CacheInfo.putContent(chickenInfo.getStarId(), "Cookie未填写<br>\r\n");
+								}
 							} catch(Exception e) {
 								logger.error("{} : ", entry.getKey(), e);
 							}
