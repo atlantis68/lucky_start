@@ -178,14 +178,14 @@ public class ChickenInfoTask implements Runnable {
 												chickenInfo.setRoomId(roomId.toString());
 											}
 										} else if(errorno.equals("100035031")) {
-											CacheInfo.putContent(chickenInfo.getStarId(), result.get("errorcode").toString() + "<br>\r\n");												
+											CacheInfo.putContent(chickenInfo.getStarId(), "Cookie不正确或者已过期，请重新填写<br>\r\n");												
 											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
 										}
 									} else {
 										logger.info("request user info failed, response code is {}", response.code());
 									}
 								} else {
-									CacheInfo.putContent(chickenInfo.getStarId(), "Cookie未填写<br>\r\n");
+									CacheInfo.putContent(chickenInfo.getStarId(), "Cookie为空，请填写<br>\r\n");
 								}
 							} catch(Exception e) {
 								logger.error("{} : ", entry.getKey(), e);
