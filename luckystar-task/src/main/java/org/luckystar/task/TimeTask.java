@@ -52,9 +52,11 @@ public class TimeTask extends TimerTask {
 				if(user != null) {
 					LaborUnion laborUnion = CacheInfo.laborUnionCache.get(user.getlId());
 					if(laborUnion != null) {
+						logger.info("{}/{}/{}, curNum = {}, maxNum = {}", laborUnion.getName(), user.getUserName(), user.getNickName(), emailEntity.getSendNum(), maxSendNum);
 						if(emailEntity.getSendNum() > maxSendNum) {
 							emailEntity.setContent("Cookie长时间未修复，系统自动关闭该用户<br>\r\n");
 							dataBaseService.closeChicken(user.getId());
+							CacheInfo.emailContent.remove(message.getKey());
 						} else {
 							emailEntity.setSendNum(emailEntity.getSendNum() + 1);
 						}
@@ -65,10 +67,10 @@ public class TimeTask extends TimerTask {
 						}
 						sb.append(laborUnion.getName()).append("/").append(user.getUserName()).append("(").append(user.getNickName()).append("):").append(emailEntity.getContent());
 					} else {
-						emailEntity.setSendNum(0);
+						CacheInfo.emailContent.remove(message.getKey());
 					}
 				} else {
-					emailEntity.setSendNum(0);
+					CacheInfo.emailContent.remove(message.getKey());
 				}
 			}
 //			CacheInfo.emailContent.clear();
