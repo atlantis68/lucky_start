@@ -3,7 +3,6 @@ package org.luckystar.task;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map.Entry;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -11,10 +10,12 @@ import org.apache.commons.lang.StringUtils;
 import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
 import org.luckystar.model.LaborUnion;
+import org.luckystar.service.DataBaseService;
 import org.luckystar.service.HttpService;
 import org.luckystar.util.MailUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -44,6 +45,9 @@ public class AutoExchangeTask extends TimerTask {
 	private int mailFixed;
 	
 	private SimpleDateFormat timeFormat;
+	
+	@Autowired
+	private DataBaseService dataBaseService;
 
 	public void init(int delay, int period, int minNum, int price, int cny, int mailRandom, int mailFixed) {
 		myName = "exchange_task";
@@ -67,65 +71,70 @@ public class AutoExchangeTask extends TimerTask {
 					StringBuffer sb = null;
 					for(Entry<Long, ChickenInfo> cis : CacheInfo.chickenInfoCache.entrySet()) {
 						ChickenInfo ci = cis.getValue();
-						try {
-							if(ci.getlId() == lus.getKey() && StringUtils.isNotEmpty(ci.getCookie())) {
-								Integer remainingBean = null;
-				    			Request request = new Request.Builder()
-					    		    .url("http://fanxing.kugou.com/index.php?action=userExchargeList")
-					    		    .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-					    		    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
-					    		    .addHeader("Cache-Control", "max-age=0")
-					    		    .addHeader("Connection", "keep-alive")
-					    		    .addHeader("Host", "fanxing.kugou.com")
-					    		    .addHeader("Upgrade-Insecure-Requests", "1")
-					    		    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-					    		    .addHeader("Cookie", ci.getCookie())
-					    		    .build();
-				    			Response response = HttpService.sendHttp(request);
-				    			if(response != null && response.isSuccessful()) {
-				    				String result = response.body().string();
-				    				int start = result.indexOf(startKey);
-				    				if(start > -1) {
-				    					int end = result.indexOf(endKey, start);
-				    					if(end > -1) {
-				    						remainingBean = (int)Double.parseDouble(result.substring(start + startKey.length(), end));
-				    					}
-				    				}
-				    			}
-				    			if(remainingBean != null) {
-				    				int exchangeNumber;
-				    				if(remainingBean > minNum * price) {
-				    					exchangeNumber = remainingBean / price;
-					        			request = new Request.Builder()
-					    	    		    .url("http://fanxing.kugou.com/UServices/Settlement/SettlementService/apply?args=[" + exchangeNumber * price + "]&_=" + System.currentTimeMillis())
-					    	    		    .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
-					    	    		    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
-					    	    		    .addHeader("Cache-Control", "max-age=0")
-					    	    		    .addHeader("Connection", "keep-alive")
-					    	    		    .addHeader("Host", "fanxing.kugou.com")
-					    	    		    .addHeader("Upgrade-Insecure-Requests", "1")
-					    	    		    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
-					    	    		    .addHeader("Cookie", ci.getCookie())
-					    	    		    .build();
-					        			response = HttpService.sendHttp(request);
-					        			if(response != null && response.isSuccessful()) {
-					        				JSONObject result = JSON.parseObject(response.body().string());
-					        				if(result.getInteger("status") == 1) {
-					        					if(sb == null) sb = new StringBuffer();
-					        					sb.append(lu.getName()).append("/").append(ci.getUserName()).append("(")
-						        					.append(ci.getNickName()).append(")于").append(timeFormat.format(new Date()))
-						        					.append("兑换了").append(exchangeNumber).append(" * ").append(price).append(" = ")
-						        					.append(exchangeNumber * price).append("个星豆（").append(exchangeNumber * cny).append("元），兑换前星豆数量")
-						        					.append(remainingBean).append("（").append((float)remainingBean / (price / cny)).append("元），兑换后星豆数量")
-						        					.append(remainingBean - exchangeNumber * price).append("（")
-						        					.append((float)(remainingBean - exchangeNumber * price) / (price / cny)).append("元）<br>");
-					        				}
-					        			}
-				    				}
-				    			}
-							}
-						} catch(Exception e) {
-							logger.error("用户{}兑换异常：{} : ", ci.getStarId(), myName, e);
+						if(CacheInfo.totalNumber == 1 || 
+								(CacheInfo.totalNumber == 2 && ci.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
+							try {
+								if(ci.getlId() == lus.getKey() && StringUtils.isNotEmpty(ci.getCookie())) {
+									Integer remainingBean = null;
+					    			Request request = new Request.Builder()
+						    		    .url("http://fanxing.kugou.com/index.php?action=userExchargeList")
+						    		    .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+						    		    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
+						    		    .addHeader("Cache-Control", "max-age=0")
+						    		    .addHeader("Connection", "keep-alive")
+						    		    .addHeader("Host", "fanxing.kugou.com")
+						    		    .addHeader("Upgrade-Insecure-Requests", "1")
+						    		    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+						    		    .addHeader("Cookie", ci.getCookie())
+						    		    .build();
+					    			Response response = HttpService.sendHttp(request);
+					    			if(response != null && response.isSuccessful()) {
+					    				String result = response.body().string();
+					    				int start = result.indexOf(startKey);
+					    				if(start > -1) {
+					    					int end = result.indexOf(endKey, start);
+					    					if(end > -1) {
+					    						remainingBean = (int)Double.parseDouble(result.substring(start + startKey.length(), end));
+					    					}
+					    				}
+					    			}
+					    			if(remainingBean != null) {
+					    				int exchangeNumber;
+					    				if(remainingBean > minNum * price) {
+					    					exchangeNumber = remainingBean / price;
+						        			request = new Request.Builder()
+						    	    		    .url("http://fanxing.kugou.com/UServices/Settlement/SettlementService/apply?args=[" + exchangeNumber * price + "]&_=" + System.currentTimeMillis())
+						    	    		    .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
+						    	    		    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
+						    	    		    .addHeader("Cache-Control", "max-age=0")
+						    	    		    .addHeader("Connection", "keep-alive")
+						    	    		    .addHeader("Host", "fanxing.kugou.com")
+						    	    		    .addHeader("Upgrade-Insecure-Requests", "1")
+						    	    		    .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36")
+						    	    		    .addHeader("Cookie", ci.getCookie())
+						    	    		    .build();
+						        			response = HttpService.sendHttp(request);
+						        			if(response != null && response.isSuccessful()) {
+						        				JSONObject result = JSON.parseObject(response.body().string());
+						        				if(result.getInteger("status") == 1) {
+						        					if(sb == null) sb = new StringBuffer();
+						        					String curTime = timeFormat.format(new Date());
+						        					sb.append(lu.getName()).append("/").append(ci.getUserName()).append("(")
+							        					.append(ci.getNickName()).append(")于").append(curTime)
+							        					.append("兑换了").append(exchangeNumber).append(" * ").append(price).append(" = ")
+							        					.append(exchangeNumber * price).append("个星豆（").append(exchangeNumber * cny).append("元），兑换前星豆数量")
+							        					.append(remainingBean).append("（").append((float)remainingBean / (price / cny)).append("元），兑换后星豆数量")
+							        					.append(remainingBean - exchangeNumber * price).append("（")
+							        					.append((float)(remainingBean - exchangeNumber * price) / (price / cny)).append("元）<br>");
+						        					dataBaseService.recordExchange(ci.getStarId(), exchangeNumber * price, curTime);
+						        				}
+						        			}
+					    				}
+					    			}
+								}
+							} catch(Exception e) {
+								logger.error("用户{}兑换异常：{} : ", ci.getStarId(), myName, e);
+							}	
 						}
 					}
 					try {

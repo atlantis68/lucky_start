@@ -74,121 +74,124 @@ public class ChickenInfoTask implements Runnable {
 				ConcurrentHashMap<Long, ChickenInfo> chickens = CacheInfo.chickenInfoCache;
 				if(chickens != null) {
 					for(Entry<Long, ChickenInfo> entry : chickens.entrySet()) {
-						if(entry.getKey() % num == seq) {
-							try {
-								ChickenInfo chickenInfo = entry.getValue();
-								if(StringUtils.isNotEmpty(chickenInfo.getCookie())) {
-									Request request = new Request.Builder()
-									    .url("http://fanxing.kugou.com/UServices/UserService/UserService/getMyUserDataInfo?args=[]&_=" + lastTime)
-									    .addHeader("Accept", "application/json, text/javascript, */*; q=0.01")
-									    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
-									    .addHeader("Cache-Control", "no-cache")
-									    .addHeader("Connection", "keep-alive")
-									    .addHeader("Host", "fanxing.kugou.com")
-									    .addHeader("Pragma", "no-cache")
-									    .addHeader("Referer", "http://fanxing.kugou.com/")
-									    .addHeader("X-Requested-With", "XMLHttpRequest")
-					    			    .addHeader("Cookie", chickenInfo.getCookie())
-									    .build();
-									Thread.sleep(new Random().nextInt(interval * diff));
-									Response response = HttpService.sendHttp(request);
-									if(response != null && response.isSuccessful()) {
-										JSONObject result = JSON.parseObject(response.body().string());
-										String errorno = result.get("errorno").toString();
-										if(errorno.equals("0")) {
-											JSONObject fxUserInfo = JSON.parseObject(result.get("data").toString());
-											JSONObject userInfo = JSON.parseObject(fxUserInfo.get("fxUserInfo").toString());
-											Date now = new Date(System.currentTimeMillis());
-											String curDay = dateFormat.format(now);
-											List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
-//											logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
-//													response.code(), userInfo, timeFormat.format(now));
-											if(count != null && count.size() > 0) {
-												Map<String, Object> workInfo = count.get(0);
-												workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
-												workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-												workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
-												workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
-												workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
-												workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
-												workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
-												workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
-												if(workInfo.get("fisrt_bean") == null) {
-													calendar.setTime(now);
-													calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
-													String yesDay = dateFormat.format(calendar.getTime());
-													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
-													if(count != null && count.size() > 0) {
-														Map<String, Object> yesWorkInfo = count.get(0);
-														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
-															(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
-														logger.info("update {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
-													} else {
-														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
-														logger.info("update {} bean using current data", chickenInfo.getStarId());
-													}
-												}
-												dataBaseService.updateWorkInfo2(workInfo);
-											} else {
-												List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), chickenInfo.getlId(), monthFormat.format(now));
-												if(taskInfo != null && taskInfo.size() > 0) {
-													Map<String, Object> workInfo = new HashMap<String, Object>();
-													workInfo.put("star_id", entry.getKey());
-													workInfo.put("l_id", chickenInfo.getlId());
+						ChickenInfo chickenInfo = entry.getValue();
+						if(CacheInfo.totalNumber == 1 || 
+								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
+							if(entry.getKey() % num == seq) {
+								try {
+									if(StringUtils.isNotEmpty(chickenInfo.getCookie())) {
+										Request request = new Request.Builder()
+										    .url("http://fanxing.kugou.com/UServices/UserService/UserService/getMyUserDataInfo?args=[]&_=" + lastTime)
+										    .addHeader("Accept", "application/json, text/javascript, */*; q=0.01")
+										    .addHeader("Accept-Language", "zh-CN,zh;q=0.8")
+										    .addHeader("Cache-Control", "no-cache")
+										    .addHeader("Connection", "keep-alive")
+										    .addHeader("Host", "fanxing.kugou.com")
+										    .addHeader("Pragma", "no-cache")
+										    .addHeader("Referer", "http://fanxing.kugou.com/")
+										    .addHeader("X-Requested-With", "XMLHttpRequest")
+						    			    .addHeader("Cookie", chickenInfo.getCookie())
+										    .build();
+										Thread.sleep(new Random().nextInt(interval * diff));
+										Response response = HttpService.sendHttp(request);
+										if(response != null && response.isSuccessful()) {
+											JSONObject result = JSON.parseObject(response.body().string());
+											String errorno = result.get("errorno").toString();
+											if(errorno.equals("0")) {
+												JSONObject fxUserInfo = JSON.parseObject(result.get("data").toString());
+												JSONObject userInfo = JSON.parseObject(fxUserInfo.get("fxUserInfo").toString());
+												Date now = new Date(System.currentTimeMillis());
+												String curDay = dateFormat.format(now);
+												List<Map<String, Object>> count = dataBaseService.checkWorkInfo(entry.getKey(), curDay);
+//												logger.info("request chicken info succeeded, response code is {}, body : {}, current time : {}", 
+//														response.code(), userInfo, timeFormat.format(now));
+												if(count != null && count.size() > 0) {
+													Map<String, Object> workInfo = count.get(0);
 													workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
 													workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
-													calendar.setTime(now);
-													calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
-													String yesDay = dateFormat.format(calendar.getTime());
-													count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
-													if(count != null && count.size() > 0) {
-														Map<String, Object> yesWorkInfo = count.get(0);
-														workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
-															(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
-														logger.info("insert {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
-													} else {
-														workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
-														logger.info("insert {} bean using current data", chickenInfo.getStarId());
-													}
 													workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
 													workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
 													workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
 													workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
 													workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
 													workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
-													workInfo.put("cur_month", monthFormat.format(now));
-													workInfo.put("cur_day", curDay);
-													workInfo.put("last_time", timeFormat.format(now));
-													workInfo.put("task_info_id", taskInfo.get(0).get("id"));
-													dataBaseService.insertWorkInfo2(workInfo);
-												}											
+													if(workInfo.get("fisrt_bean") == null) {
+														calendar.setTime(now);
+														calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+														String yesDay = dateFormat.format(calendar.getTime());
+														count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
+														if(count != null && count.size() > 0) {
+															Map<String, Object> yesWorkInfo = count.get(0);
+															workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
+																(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
+															logger.info("update {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
+														} else {
+															workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
+															logger.info("update {} bean using current data", chickenInfo.getStarId());
+														}
+													}
+													dataBaseService.updateWorkInfo2(workInfo);
+												} else {
+													List<Map<String, Object>> taskInfo = dataBaseService.doGetTaskInfo(chickenInfo.getId(), chickenInfo.getlId(), monthFormat.format(now));
+													if(taskInfo != null && taskInfo.size() > 0) {
+														Map<String, Object> workInfo = new HashMap<String, Object>();
+														workInfo.put("star_id", entry.getKey());
+														workInfo.put("l_id", chickenInfo.getlId());
+														workInfo.put("star_level", userInfo.get("starLevel") != null ? userInfo.get("starLevel") : 0);
+														workInfo.put("rich_level", userInfo.get("richLevel") != null ? userInfo.get("richLevel") : 0);
+														calendar.setTime(now);
+														calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+														String yesDay = dateFormat.format(calendar.getTime());
+														count = dataBaseService.checkWorkInfo(entry.getKey(), yesDay);
+														if(count != null && count.size() > 0) {
+															Map<String, Object> yesWorkInfo = count.get(0);
+															workInfo.put("fisrt_bean", yesWorkInfo.get("bean_total") != null ? yesWorkInfo.get("bean_total") : 
+																(userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0));
+															logger.info("insert {} bean using yesterday data : last = {}, now = {}", chickenInfo.getStarId(), yesWorkInfo.get("bean_total"), userInfo.get("beanTotal"));
+														} else {
+															workInfo.put("fisrt_bean", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);	
+															logger.info("insert {} bean using current data", chickenInfo.getStarId());
+														}
+														workInfo.put("bean_total", userInfo.get("beanTotal") != null ? userInfo.get("beanTotal") : 0);
+														workInfo.put("coin", userInfo.get("coin") != null ? userInfo.get("coin") : 0);
+														workInfo.put("coin_total", userInfo.get("coinTotal") != null ? userInfo.get("coinTotal") : 0);
+														workInfo.put("fans_count", userInfo.get("fansCount") != null ? userInfo.get("fansCount") : 0);
+														workInfo.put("follow_count", userInfo.get("followCount") != null ? userInfo.get("followCount") : 0);
+														workInfo.put("experience", userInfo.get("experience") != null ? userInfo.get("experience") : 0);
+														workInfo.put("cur_month", monthFormat.format(now));
+														workInfo.put("cur_day", curDay);
+														workInfo.put("last_time", timeFormat.format(now));
+														workInfo.put("task_info_id", taskInfo.get(0).get("id"));
+														dataBaseService.insertWorkInfo2(workInfo);
+													}											
+												}
+												Object nickName = userInfo.get("nickName");
+												if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
+														!chickenInfo.getNickName().equals(nickName.toString()))) {
+													logger.info("nickname is null or has changed, new name is {}", nickName);
+													dataBaseService.updateNickName(chickenInfo.getId(), nickName.toString());
+													chickenInfo.setNickName(nickName.toString());
+												}
+												Object roomId = userInfo.get("roomId");
+												if(roomId != null && (StringUtils.isEmpty(chickenInfo.getRoomId()) || 
+														!chickenInfo.getRoomId().equals(roomId.toString()))) {
+													logger.info("roomid is null or has changed, new roomid is {}", roomId);
+													dataBaseService.updateRoomId(chickenInfo.getId(), roomId.toString());
+													chickenInfo.setRoomId(roomId.toString());
+												}
+											} else if(errorno.equals("100035031")) {
+												CacheInfo.putContent(chickenInfo.getStarId(), "Cookie不正确或者已过期，请重新填写<br>\r\n");												
+												logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
 											}
-											Object nickName = userInfo.get("nickName");
-											if(nickName != null && (StringUtils.isEmpty(chickenInfo.getNickName()) || 
-													!chickenInfo.getNickName().equals(nickName.toString()))) {
-												logger.info("nickname is null or has changed, new name is {}", nickName);
-												dataBaseService.updateNickName(chickenInfo.getId(), nickName.toString());
-												chickenInfo.setNickName(nickName.toString());
-											}
-											Object roomId = userInfo.get("roomId");
-											if(roomId != null && (StringUtils.isEmpty(chickenInfo.getRoomId()) || 
-													!chickenInfo.getRoomId().equals(roomId.toString()))) {
-												logger.info("roomid is null or has changed, new roomid is {}", roomId);
-												dataBaseService.updateRoomId(chickenInfo.getId(), roomId.toString());
-												chickenInfo.setRoomId(roomId.toString());
-											}
-										} else if(errorno.equals("100035031")) {
-											CacheInfo.putContent(chickenInfo.getStarId(), "Cookie不正确或者已过期，请重新填写<br>\r\n");												
-											logger.info("user {} errorno is not equal to zero : {}", chickenInfo.getStarId(), result);
+										} else {
+											logger.info("request user info failed, response code is {}", response.code());
 										}
 									} else {
-										logger.info("request user info failed, response code is {}", response.code());
+										CacheInfo.putContent(chickenInfo.getStarId(), "Cookie为空，请填写<br>\r\n");
 									}
-								} else {
-									CacheInfo.putContent(chickenInfo.getStarId(), "Cookie为空，请填写<br>\r\n");
+								} catch(Exception e) {
+									logger.error("{} : ", entry.getKey(), e);
 								}
-							} catch(Exception e) {
-								logger.error("{} : ", entry.getKey(), e);
 							}
 						}
 					}

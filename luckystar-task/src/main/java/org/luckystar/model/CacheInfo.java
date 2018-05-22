@@ -9,6 +9,10 @@ public class CacheInfo {
 	public static ConcurrentHashMap<Long, ChickenInfo> chickenInfoCache;
 
 	public static ConcurrentHashMap<Long, EmailEntity> emailContent;
+	
+	public static int modNumber;
+	
+	public static int totalNumber;
 
 	static {
 		laborUnionCache = new ConcurrentHashMap<Integer, LaborUnion>();

@@ -94,6 +94,7 @@
 			<tx:method name="clear*" rollback-for="java.lang.Exception" propagation="REQUIRED" />
 			<tx:method name="upload*" rollback-for="java.lang.Exception" propagation="REQUIRED" />
 			<tx:method name="close*" rollback-for="java.lang.Exception" propagation="REQUIRED" />
+			<tx:method name="record*" rollback-for="java.lang.Exception" propagation="REQUIRED" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>	

@@ -2,9 +2,11 @@ package org.luckystar;
 
 import java.util.Properties;
 
+import org.luckystar.model.CacheInfo;
 import org.luckystar.task.AutoExchangeTask;
 import org.luckystar.task.CacheTask;
 import org.luckystar.task.ChickenInfoTask;
+import org.luckystar.task.HeartbeatTask;
 import org.luckystar.task.TimeTask;
 import org.luckystar.task.WorkTimeTask;
 import org.springframework.context.ApplicationContext;
@@ -24,6 +26,14 @@ public class BootStrap {
     		Properties properties = new Properties();
 			properties.load(BootStrap.class.getResourceAsStream("/sys.properties"));
 	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
+	    	int instanceId = Integer.parseInt(properties.get("ls.instanceId").toString().trim());
+	    	CacheInfo.modNumber = instanceId;
+	    	String groupId = properties.get("ls.groupId").toString().trim();
+	    	int heartbeatDelay = Integer.parseInt(properties.get("ls.heartbeat.delay").toString().trim());
+	    	int heartbeatPeriod = Integer.parseInt(properties.get("ls.heartbeat.interval").toString().trim());
+	    	int heartbeatThreshold = Integer.parseInt(properties.get("ls.heartbeat.threshold").toString().trim());
+	    	HeartbeatTask heartbeatTask = (HeartbeatTask)context.getBean("heartbeatTask");
+	    	heartbeatTask.init(groupId, instanceId, heartbeatDelay, heartbeatPeriod, heartbeatThreshold);
 	    	int cacheTaskDelay = Integer.parseInt(properties.get("ls.cacheTask.delay").toString().trim());
 	    	int cacheTaskPeriod = Integer.parseInt(properties.get("ls.cacheTask.period").toString().trim());
 	    	int cacheTaskBoundaryValue = Integer.parseInt(properties.get("ls.cacheTask.boundaryValue").toString().trim());
@@ -34,10 +44,11 @@ public class BootStrap {
 	    	int workTimeInterval = Integer.parseInt(properties.get("ls.workTime.interval").toString().trim());
 	    	int workTimeDiff = Integer.parseInt(properties.get("ls.workTime.diff").toString().trim());
 	    	Float workTimeRate = Float.parseFloat(properties.get("ls.workTime.rate").toString().trim());
+	    	int workTimeThreshold = Integer.parseInt(properties.get("ls.workTime.threshold").toString().trim());
 	    	WorkTimeTask[] workTimeTasks = new WorkTimeTask[workTimeCount];
 	    	for(int i = 0; i < workTimeCount; i++) {
 	    		workTimeTasks[i] = (WorkTimeTask)context.getBean("workTimeTask");
-	    		workTimeTasks[i].init(i, workTimeCount, workTimeInterval, workTimeDiff, workTimeRate);
+	    		workTimeTasks[i].init(i, workTimeCount, workTimeInterval, workTimeDiff, workTimeRate, workTimeThreshold);
 	    	}
 	    	int userInfoCount = Integer.parseInt(properties.get("ls.userInfo.threadCount").toString().trim());
 	    	int userInfoInterval = Integer.parseInt(properties.get("ls.userInfo.interval").toString().trim());
