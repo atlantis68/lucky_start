@@ -85,9 +85,9 @@ public class DataBaseService {
 				new Object[] {id});
 	}
 	
-	public void recordExchange(long starId, long exchangeNumber, String dealTime) {
-		jdbcTemplate.update("INSERT INTO exchange_history (star_id, exchange_number, deal_time) VALUES(?, ?, ?)", 
-				new Object[] {starId, exchangeNumber, dealTime});
+	public void recordExchange(int lid, long starId, long exchangeNumber, String dealTime) {
+		jdbcTemplate.update("INSERT INTO exchange_history (star_id, exchange_number, deal_time, labor_union_id) VALUES(?, ?, ?, ?)", 
+				new Object[] {starId, exchangeNumber, dealTime, lid});
 	}
 	
 	public int updateHeartbeat(String group, int instanceId, int threshold) {

@@ -126,7 +126,7 @@ public class AutoExchangeTask extends TimerTask {
 							        					.append(remainingBean).append("（").append((float)remainingBean / (price / cny)).append("元），兑换后星豆数量")
 							        					.append(remainingBean - exchangeNumber * price).append("（")
 							        					.append((float)(remainingBean - exchangeNumber * price) / (price / cny)).append("元）<br>");
-						        					dataBaseService.recordExchange(ci.getStarId(), exchangeNumber * price, curTime);
+						        					dataBaseService.recordExchange(lu.getlId(), ci.getStarId(), exchangeNumber * price, curTime);
 						        				}
 						        			}
 					    				}
