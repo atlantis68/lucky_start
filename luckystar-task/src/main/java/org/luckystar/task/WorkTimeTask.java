@@ -143,8 +143,9 @@ public class WorkTimeTask implements Runnable {
 														long diff = (long)((now.getTime() - last) * rate / 1000);
 														workInfo.put("work_time", curWorkTime + (diff < interval * threshold ? diff : 0l));
 														workInfo.put("online_status", 1);
-														logger.info("labor union = {}, starId = {}, now = {}, last = {}, diff = {}", chickenInfo.getlId(), 
-																entry.getKey(), timeFormat.format(new Date(now.getTime())), timeFormat.format(new Date(last)), diff);
+														logger.info("labor union = {}, id = {}, starId = {}, now = {}, last = {}, diff = {}", chickenInfo.getlId(), 
+																chickenInfo.getId(), entry.getKey(), timeFormat.format(new Date(now.getTime())), 
+																timeFormat.format(new Date(last)), diff);
 													} else {
 														workInfo.put("online_status", 0);
 													}
