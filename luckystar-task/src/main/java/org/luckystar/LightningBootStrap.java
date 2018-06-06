@@ -18,13 +18,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * @author duheng
  *
  */
-public class BootStrap {
+public class LightningBootStrap {
 
 	
     public static void main( String[] args ) {
     	try {
     		Properties properties = new Properties();
-			properties.load(BootStrap.class.getResourceAsStream("/sys.properties"));
+			properties.load(LightningBootStrap.class.getResourceAsStream("/sys.properties"));
 	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
 	    	int instanceId = Integer.parseInt(properties.get("ls.instanceId").toString().trim());
 	    	CacheInfo.modNumber = instanceId;
