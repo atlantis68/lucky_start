@@ -90,6 +90,7 @@ public class WorkTimeTask implements Runnable {
 						if(CacheInfo.totalNumber == 1 || 
 								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
 							if(entry.getKey() % num == seq) {
+								long startTime = System.currentTimeMillis();
 								try {
 									String type = CacheInfo.laborUnionCache.get(chickenInfo.getlId()).getType();
 									switch(type) {
@@ -143,9 +144,9 @@ public class WorkTimeTask implements Runnable {
 														long diff = (long)((now.getTime() - last) * rate / 1000);
 														workInfo.put("work_time", curWorkTime + (diff < interval * threshold ? diff : 0l));
 														workInfo.put("online_status", 1);
-														logger.info("labor union = {}, id = {}, starId = {}, now = {}, last = {}, diff = {}", chickenInfo.getlId(), 
-																chickenInfo.getId(), entry.getKey(), timeFormat.format(new Date(now.getTime())), 
-																timeFormat.format(new Date(last)), diff);
+														logger.info("labor union = {}, id = {}, starId = {}, now = {}, last = {}, cost = {}, diff = {}", chickenInfo.getlId(), 
+																chickenInfo.getId(), entry.getKey(), timeFormat.format(new Date(now.getTime())), timeFormat.format(new Date(last)), 
+																System.currentTimeMillis() - startTime, diff);
 													} else {
 														workInfo.put("online_status", 0);
 													}
@@ -204,7 +205,7 @@ public class WorkTimeTask implements Runnable {
 										break;
 									}
 								} catch(Exception e) {
-									logger.error("{} : ", entry.getKey(), e);
+									logger.error("{}, cost = {} : ", entry.getKey(), System.currentTimeMillis() - startTime, e);
 								}
 							}
 						}

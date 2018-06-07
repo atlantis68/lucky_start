@@ -78,6 +78,7 @@ public class ChickenInfoTask implements Runnable {
 						if(CacheInfo.totalNumber == 1 || 
 								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
 							if(entry.getKey() % num == seq) {
+								long startTime = System.currentTimeMillis();
 								try {
 									if(StringUtils.isNotEmpty(chickenInfo.getCookie())) {
 										Request request = new Request.Builder()
@@ -192,7 +193,7 @@ public class ChickenInfoTask implements Runnable {
 										CacheInfo.putContent(chickenInfo.getStarId(), "Cookie为空，请填写<br>\r\n");
 									}
 								} catch(Exception e) {
-									logger.error("{} : ", entry.getKey(), e);
+									logger.error("{}, cost = {} : ", entry.getKey(), System.currentTimeMillis() - startTime, e);
 								}
 							}
 						}
