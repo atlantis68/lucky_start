@@ -78,7 +78,7 @@ public class ChickenInfoTask implements Runnable {
 						if(CacheInfo.totalNumber == 1 || 
 								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
 							if(entry.getKey() % num == seq) {
-								long startTime = System.currentTimeMillis();
+								long startTime = 0;
 								try {
 									if(StringUtils.isNotEmpty(chickenInfo.getCookie())) {
 										Request request = new Request.Builder()
@@ -94,6 +94,7 @@ public class ChickenInfoTask implements Runnable {
 						    			    .addHeader("Cookie", chickenInfo.getCookie())
 										    .build();
 										Thread.sleep(new Random().nextInt(interval * diff));
+										startTime = System.currentTimeMillis();
 										Response response = HttpService.sendHttp(request);
 										if(response != null && response.isSuccessful()) {
 											JSONObject result = JSON.parseObject(response.body().string());

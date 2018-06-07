@@ -90,7 +90,7 @@ public class WorkTimeTask implements Runnable {
 						if(CacheInfo.totalNumber == 1 || 
 								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
 							if(entry.getKey() % num == seq) {
-								long startTime = System.currentTimeMillis();
+								long startTime = 0;
 								try {
 									String type = CacheInfo.laborUnionCache.get(chickenInfo.getlId()).getType();
 									switch(type) {
@@ -107,6 +107,7 @@ public class WorkTimeTask implements Runnable {
 										    .addHeader("X-Requested-With", "XMLHttpRequest")
 										    .build();
 										Thread.sleep(new Random().nextInt(interval * diff));
+										startTime = System.currentTimeMillis();
 										Response response = HttpService.sendHttp(request);
 										if(response != null && response.isSuccessful()) {
 											String result = response.body().string();
