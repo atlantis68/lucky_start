@@ -13,6 +13,7 @@ import org.luckystar.model.LaborUnion;
 import org.luckystar.service.DataBaseService;
 import org.luckystar.service.HttpService;
 import org.luckystar.util.MailUtils;
+import org.luckystar.util.ToolUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,8 +72,7 @@ public class AutoExchangeTask extends TimerTask {
 					StringBuffer sb = null;
 					for(Entry<Long, ChickenInfo> cis : CacheInfo.chickenInfoCache.entrySet()) {
 						ChickenInfo ci = cis.getValue();
-						if(CacheInfo.totalNumber == 1 || 
-								(CacheInfo.totalNumber == 2 && ci.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
+						if(ToolUtils.isHitLocal(ci.getId())) {
 							try {
 								if(ci.getlId() == lus.getKey() && StringUtils.isNotEmpty(ci.getCookie())) {
 									Integer remainingBean = null;

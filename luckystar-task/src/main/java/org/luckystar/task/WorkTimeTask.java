@@ -14,6 +14,7 @@ import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
 import org.luckystar.service.DataBaseService;
 import org.luckystar.service.HttpService;
+import org.luckystar.util.ToolUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,8 +88,7 @@ public class WorkTimeTask implements Runnable {
 				if(chickens != null) {
 					for(Entry<Long, ChickenInfo> entry : chickens.entrySet()) {
 						ChickenInfo chickenInfo = entry.getValue();
-						if(CacheInfo.totalNumber == 1 || 
-								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
+						if(ToolUtils.isHitLocal(chickenInfo.getId())) {
 							if(entry.getKey() % num == seq) {
 								long startTime = 0;
 								try {
@@ -143,7 +143,12 @@ public class WorkTimeTask implements Runnable {
 														long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 														int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
 														long diff = (long)((now.getTime() - last) * rate / 1000);
-														workInfo.put("work_time", curWorkTime + (diff < interval * threshold ? diff : 0l));
+														if(diff >= interval * threshold) {
+															logger.warn("labor union = {}, id = {}, starId = {}, diff = {} will be reset to 0", chickenInfo.getlId(), chickenInfo.getId(), 
+																	entry.getKey(), diff);
+															diff = 0;
+														}
+														workInfo.put("work_time", curWorkTime + diff);
 														workInfo.put("online_status", 1);
 														logger.info("labor union = {}, id = {}, starId = {}, now = {}, last = {}, cost = {}, diff = {}", chickenInfo.getlId(), 
 																chickenInfo.getId(), entry.getKey(), timeFormat.format(new Date(now.getTime())), timeFormat.format(new Date(last)), 
@@ -164,7 +169,12 @@ public class WorkTimeTask implements Runnable {
 														workInfo.put("l_id", chickenInfo.getlId());
 														if(isOnline) {
 															long diff = (long)((now.getTime() - weeHours.getTime()) * rate / 1000);
-															workInfo.put("work_time", diff < interval * threshold ? diff : interval);
+															if(diff >= interval * threshold) {
+																logger.warn("today labor union = {}, id = {}, starId = {}, diff = {} will be reset to {}", chickenInfo.getlId(), chickenInfo.getId(), 
+																		entry.getKey(), diff, interval);
+																diff = interval;
+															}
+															workInfo.put("work_time", diff);
 															workInfo.put("online_status", 1);
 														} else {
 															workInfo.put("work_time", 0);
@@ -185,7 +195,12 @@ public class WorkTimeTask implements Runnable {
 																long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 																int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
 																long diff = (long)((weeHours.getTime() - last) * rate / 1000);
-																workInfo.put("work_time", curWorkTime + (diff < interval * threshold ? diff : 0l));	
+																if(diff >= interval * threshold) {
+																	logger.warn("yesterday labor union = {}, id = {}, starId = {}, diff = {} will be reset to 0", chickenInfo.getlId(), chickenInfo.getId(), 
+																			entry.getKey(), diff);
+																	diff = 0;
+																}
+																workInfo.put("work_time", curWorkTime + diff);	
 																workInfo.put("online_status", 1);
 															} else {
 																workInfo.put("online_status", 0);

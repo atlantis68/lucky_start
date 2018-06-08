@@ -15,6 +15,7 @@ import org.luckystar.model.CacheInfo;
 import org.luckystar.model.ChickenInfo;
 import org.luckystar.service.DataBaseService;
 import org.luckystar.service.HttpService;
+import org.luckystar.util.ToolUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,8 +76,7 @@ public class ChickenInfoTask implements Runnable {
 				if(chickens != null) {
 					for(Entry<Long, ChickenInfo> entry : chickens.entrySet()) {
 						ChickenInfo chickenInfo = entry.getValue();
-						if(CacheInfo.totalNumber == 1 || 
-								(CacheInfo.totalNumber == 2 && chickenInfo.getId() % CacheInfo.totalNumber == CacheInfo.modNumber)) {
+						if(ToolUtils.isHitLocal(chickenInfo.getId())) {
 							if(entry.getKey() % num == seq) {
 								long startTime = 0;
 								try {
