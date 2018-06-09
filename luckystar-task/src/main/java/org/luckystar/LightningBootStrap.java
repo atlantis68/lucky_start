@@ -26,6 +26,7 @@ public class LightningBootStrap {
     		Properties properties = new Properties();
 			properties.load(LightningBootStrap.class.getResourceAsStream("/sys.properties"));
 	    	ApplicationContext context = new ClassPathXmlApplicationContext(new String[] {"spring-service.xml"});
+	    	CacheInfo.role = properties.get("ls.role").toString().trim();
 	    	int instanceId = Integer.parseInt(properties.get("ls.instanceId").toString().trim());
 	    	CacheInfo.modNumber = instanceId;
 	    	String groupId = properties.get("ls.groupId").toString().trim();
@@ -33,7 +34,7 @@ public class LightningBootStrap {
 	    	int heartbeatPeriod = Integer.parseInt(properties.get("ls.heartbeat.interval").toString().trim());
 	    	int heartbeatThreshold = Integer.parseInt(properties.get("ls.heartbeat.threshold").toString().trim());
 	    	HeartbeatTask heartbeatTask = (HeartbeatTask)context.getBean("heartbeatTask");
-	    	heartbeatTask.init(groupId, instanceId, heartbeatDelay, heartbeatPeriod, heartbeatThreshold);
+	    	heartbeatTask.init(groupId, instanceId, heartbeatDelay, heartbeatPeriod, heartbeatThreshold);	    		
 	    	int cacheTaskDelay = Integer.parseInt(properties.get("ls.cacheTask.delay").toString().trim());
 	    	int cacheTaskPeriod = Integer.parseInt(properties.get("ls.cacheTask.period").toString().trim());
 	    	int cacheTaskBoundaryValue = Integer.parseInt(properties.get("ls.cacheTask.boundaryValue").toString().trim());

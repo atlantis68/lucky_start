@@ -13,6 +13,8 @@ public class CacheInfo {
 	public static int modNumber;
 	
 	public static int totalNumber;
+	
+	public static String role;
 
 	static {
 		laborUnionCache = new ConcurrentHashMap<Integer, LaborUnion>();

@@ -91,8 +91,10 @@ public class DataBaseService {
 	}
 	
 	public int updateHeartbeat(String group, int instanceId, int threshold) {
-		jdbcTemplate.update("UPDATE heartbeat_record SET update_time = now() where instance_id = ? and group_id = ?", 
-				new Object[] {instanceId, group});
+    	if(CacheInfo.role.equals("master")) {
+    		jdbcTemplate.update("UPDATE heartbeat_record SET update_time = now() where instance_id = ? and group_id = ?", 
+    				new Object[] {instanceId, group});
+    	}
 		int count = jdbcTemplate.queryForObject("select count(*) from heartbeat_record where group_id = ? and TIMESTAMPDIFF(SECOND, update_time, NOW()) < ?", 
 				new Object[] {group, threshold}, Integer.class);
 		return count > 2 ? 2 : count;
