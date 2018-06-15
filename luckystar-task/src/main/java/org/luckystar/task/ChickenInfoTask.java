@@ -183,6 +183,9 @@ public class ChickenInfoTask implements Runnable {
 													dataBaseService.updateRoomId(chickenInfo.getId(), roomId.toString());
 													chickenInfo.setRoomId(roomId.toString());
 												}
+												if(CacheInfo.emailContent.containsKey(chickenInfo.getStarId())) {
+													CacheInfo.emailContent.remove(chickenInfo.getStarId());
+												}
 											} else if(errorno.equals("100035031")) {
 												CacheInfo.putContent(chickenInfo.getStarId(), "Cookie不正确或者已过期，请重新填写<br>\r\n");												
 												logger.info("user {}|{} errorno is not equal to zero : {}", chickenInfo.getId(), chickenInfo.getStarId(), result);
