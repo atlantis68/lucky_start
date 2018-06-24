@@ -143,7 +143,7 @@ public class WorkTimeTask implements Runnable {
 														long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 														int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
 														long diff = (long)((now.getTime() - last) * rate / 1000);
-														if(diff >= interval * threshold) {
+														if(diff >= interval * threshold || diff < 0) {
 															logger.warn("labor union = {}, id = {}, starId = {}, diff = {} will be reset to 0", chickenInfo.getlId(), chickenInfo.getId(), 
 																	entry.getKey(), diff);
 															diff = 0;
@@ -169,7 +169,7 @@ public class WorkTimeTask implements Runnable {
 														workInfo.put("l_id", chickenInfo.getlId());
 														if(isOnline) {
 															long diff = (long)((now.getTime() - weeHours.getTime()) * rate / 1000);
-															if(diff >= interval * threshold) {
+															if(diff >= interval * threshold || diff < 0) {
 																logger.warn("today labor union = {}, id = {}, starId = {}, diff = {} will be reset to {}", chickenInfo.getlId(), chickenInfo.getId(), 
 																		entry.getKey(), diff, interval);
 																diff = interval;
@@ -195,7 +195,7 @@ public class WorkTimeTask implements Runnable {
 																long last = timeFormat.parse(workInfo.get("last_time").toString()).getTime();
 																int curWorkTime = workInfo.get("work_time") != null ? Integer.parseInt(workInfo.get("work_time").toString()) : 0;
 																long diff = (long)((weeHours.getTime() - last) * rate / 1000);
-																if(diff >= interval * threshold) {
+																if(diff >= interval * threshold || diff < 0) {
 																	logger.warn("yesterday labor union = {}, id = {}, starId = {}, diff = {} will be reset to 0", chickenInfo.getlId(), chickenInfo.getId(), 
 																			entry.getKey(), diff);
 																	diff = 0;
