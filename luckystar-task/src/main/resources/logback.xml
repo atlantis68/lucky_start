@@ -1,21 +1,3 @@
-<!-- <?xml version="1.0" encoding="UTF-8"?>
-<configuration>
-    <property name="logLevel" value="INFO"/>
-    <property name="outPattern" value="[%-5p] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] [%c] - %m%n" />
-    <property name="maxHistory" value="5" />
-    logback
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>${outPattern}</pattern>
-            <charset>UTF-8</charset>
-        </encoder>
-    </appender>
-    
-    <root level="${logLevel}">
-        <appender-ref ref="CONSOLE" />
-    </root>
-
-</configuration> -->
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <property name="logPath" value="../logs"/>
@@ -28,7 +10,7 @@
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${logPath}/access.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logPath}/lightning-server.log.%d{yyyy-MM-dd}</fileNamePattern>
+            <fileNamePattern>${logPath}/access.log.%d{yyyy-MM-dd}</fileNamePattern>
             <maxHistory>${maxHistory}</maxHistory>
         </rollingPolicy>
         <encoder>
