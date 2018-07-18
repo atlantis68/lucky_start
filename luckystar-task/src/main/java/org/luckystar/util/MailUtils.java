@@ -39,22 +39,22 @@ public class MailUtils {
 		qqProps.put("mail.user", "346411799@qq.com");
 		qqProps.put("mail.password", "jfbbcvqurpaycaga");
 		platformMail.add(qqProps);
-//		Properties wyProps = new Properties();
-//		wyProps.put("mail.smtp.host", "smtp.163.com");
-//		wyProps.put("mail.smtp.auth", "true");
-//		wyProps.put("mail.smtps.timeout", 10000);
-//		wyProps.put("mail.smtps.connectiontimeout", 10000);
-//		wyProps.put("mail.user", "18980868096@163.com");
-//		wyProps.put("mail.password", "Atlantis68");
-//		platformMail.add(wyProps);
-//		Properties sinaProps = new Properties();
-//		sinaProps.put("mail.smtp.host", "smtp.sina.com");
-//		sinaProps.put("mail.smtp.auth", "true");
-//		sinaProps.put("mail.smtps.timeout", 10000);
-//		sinaProps.put("mail.smtps.connectiontimeout", 10000);
-//		sinaProps.put("mail.user", "atlantis68@sina.com");
-//		sinaProps.put("mail.password", "`1234567890-");
-//		platformMail.add(sinaProps);
+		Properties wyProps = new Properties();
+		wyProps.put("mail.smtp.host", "smtp.163.com");
+		wyProps.put("mail.smtp.auth", "true");
+		wyProps.put("mail.smtps.timeout", 10000);
+		wyProps.put("mail.smtps.connectiontimeout", 10000);
+		wyProps.put("mail.user", "18980868096@163.com");
+		wyProps.put("mail.password", "Atlantis68");
+		platformMail.add(wyProps);
+		Properties sinaProps = new Properties();
+		sinaProps.put("mail.smtp.host", "smtp.sina.com");
+		sinaProps.put("mail.smtp.auth", "true");
+		sinaProps.put("mail.smtps.timeout", 10000);
+		sinaProps.put("mail.smtps.connectiontimeout", 10000);
+		sinaProps.put("mail.user", "atlantis68@sina.com");
+		sinaProps.put("mail.password", "`1234567890-");
+		platformMail.add(sinaProps);
 	}
 
 	public static void sendMail(String subject, String content, String receiver, String laborUnion, int mailRandom, int mailFixed) {
