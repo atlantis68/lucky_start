@@ -61,9 +61,9 @@ public class MailUtils {
 		int curSeq = 0;
 		boolean isSuccess = false;
 		while(curSeq++ < maxRetry && !isSuccess) {
+			Properties props = platformMail.get(seq++ % platformMail.size());
 			try {
 				Thread.sleep((long)(new Random().nextFloat() * mailRandom * 1000 + mailFixed * 1000));
-				Properties props = platformMail.get(seq++ % platformMail.size());
 				Session ssn = Session.getInstance(props, new Authenticator() {
 
 		            protected PasswordAuthentication getPasswordAuthentication() {
@@ -83,10 +83,10 @@ public class MailUtils {
 				message.setContent(content, "text/html;charset=utf-8");
 	 			Transport.send(message);
 	 			isSuccess = true;
-	 			logger.info("send mail to {}({}) successful in {} times", receiver, laborUnion, curSeq);
+	 			logger.info("{} send mail to {}({}) successful in {} times", props.getProperty("mail.user"), receiver, laborUnion, curSeq);
 			} catch(Exception e) {
 				e.printStackTrace();
-	 			logger.error("send mail to {}({}) failed in {} times", receiver, laborUnion, curSeq);
+	 			logger.error("{} send mail to {}({}) failed in {} times", props.getProperty("mail.user"), receiver, laborUnion, curSeq);
 			}	
 		}
 
